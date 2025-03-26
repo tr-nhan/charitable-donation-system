@@ -9,5 +9,54 @@
     --color-accent-1: #035772;
     --color-accent-2: #E0FD2C;
     --color-accent-3: #A5C8D4;
-    --color-accent-4: ##A12767;
+    --color-accent-4: #A12767;
+    --text-color-1: #252525;
+    --text-color-2: #18412d;
+    --text-color-3: #015d32;
+
+    --animate-fadeIn: fadeIn 1s linear .6s forwards;
+
+
+    @keyframes fadeIn {
+
+        0% {
+            opacity: 0;
+            transform: translate3d(0, .5rem, 0);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateZ(0);
+        }
+    }
+
 }
+
+@layer components {
+    progress {
+        @apply w-full h-2 appearance-none rounded-full overflow-hidden bg-[#e5e1d7];
+    }
+
+    /* Nền thanh progress (Chrome, Safari, Edge) */
+    progress::-webkit-progress-bar {
+        @apply bg-[#e5e1d7] rounded-full;
+    }
+
+    /* Hiệu ứng gradient và bóng sáng trên progress (Chrome, Safari, Edge) */
+    progress::-webkit-progress-value {
+        @apply bg-gradient-to-r from-green-400 to-green-700 rounded-full transition-all duration-500;
+    }
+
+    /* Hiệu ứng gradient và bóng sáng trên progress (Firefox) */
+    progress::-moz-progress-bar {
+        @apply bg-gradient-to-r from-green-600 to-green-400 rounded-full shadow-[inset_0_-2px_4px_rgba(255,255,255,0.5)] transition-all duration-500;
+    }
+    .text-multiline-ellipsis {
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* Số dòng tối đa */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
+
+

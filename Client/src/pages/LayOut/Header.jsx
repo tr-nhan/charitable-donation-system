@@ -15,7 +15,7 @@ function Header() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     return (
-        <header className="px-2 w-full flex items-center min-h-[56px] fixed">
+        <header className="px-2 w-full flex items-center min-h-[56px] fixed z-1000 bg-white">
             <nav className="w-full h-full flex flex-row justify-between items-center">
                 <IconButton>
                     <SearchOutlinedIcon></SearchOutlinedIcon>
