@@ -238,7 +238,7 @@ function HomePage() {
         }
       `}</style>
 
-            <section className="relative h-[30rem] sm:h-[35rem] md:h-[39rem] md:mb-16 mb-10">
+            <section className="relative h-[40rem] sm:h-[48rem] md:h-[56rem] md:mb-16 mb-10">
                 <div
                     className="fixed top-0 left-0 w-full h-full bg-no-repeat bg-cover bg-center"
                     style={{
@@ -531,7 +531,7 @@ function HomePage() {
                 )}
             </section>
 
-            <div className="relative bg-white h-full w-full">
+            <div className="relative bg-white w-full">
                 <section
                     ref={(el) => (sectionRefs.current[1] = el)}
                     data-index="section2"
@@ -556,9 +556,9 @@ function HomePage() {
                 </section>
             </div>
 
-            <div className="relative bg-white h-full w-full">
+            <div className="relative bg-white w-full pt-10">
                 <section className="pt-8 flex items-center justify-center bg-white">
-                    <div className="w-7xl mt-0 my-auto px-4 pb-[10.5rem] lg:max-w-[72rem] md:max-w-[56rem] sm:max-w-[36rem]">
+                    <div className="w-7xl mt-0 my-auto px-4 pb-[10.5rem] max-w-[20rem] xl:max-w-[80rem] lg:max-w-[56rem] md:max-w-[40rem] sm:max-w-[36rem]">
                         <h2 className="font-semibold text-2xl">Collectez des fonds pour qui vous voulez</h2>
                         <ul>
                             <li className="border-b border-[#ccc] pt-12 pb-8">
