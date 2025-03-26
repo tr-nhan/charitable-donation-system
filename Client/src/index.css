@@ -9,6 +9,21 @@
     --color-accent-1: #035772;
     --color-accent-2: #E0FD2C;
     --color-accent-3: #A5C8D4;
-    --color-accent-4: ##A12767;
+    --color-accent-4: #A12767;
+    --text-color-1: #252525;
+    --text-color-2: #18412D;
+    --text-color-3: #015D32;
 }
 /*  */
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-in-out;
+  }
