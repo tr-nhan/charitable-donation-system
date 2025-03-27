@@ -24,6 +24,24 @@
     }
   }
 
-  .animate-fadeIn {
+.animate-fadeIn {
     animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes spinACircle {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(180deg); }
+  }
+  
+  @keyframes spinReverse {
+    from { transform: rotate(180deg); }
+    to { transform: rotate(0deg); }
+  }
+  
+  .animate-spinACircle {
+    animation: spinACircle 0.5s ease-in-out forwards;
+  }
+  
+  .animate-spinReverse {
+    animation: spinReverse 0.5s ease-in-out forwards;
   }

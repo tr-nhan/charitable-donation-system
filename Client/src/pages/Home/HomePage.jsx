@@ -206,8 +206,20 @@ function HomePage() {
         };
     }, []);
 
+
+    const [showButton, setShowButton] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowButton(window.scrollY > 630);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
     return (
-        <div className="relative bg-white h-screen w-screen z-100 top-0 left-0">
+        <div className="relative bg-white flex flex-col min-h-[calc(100vh-56px)]">
             <style jsx global>{`
         .slide-out {
           animation: slideOut 0.2s ease-in-out forwards;
@@ -271,7 +283,7 @@ function HomePage() {
 
                     <div className="bg-white block">
                         <div className="flex justify-between items-center relative">
-                            <button onClick={toggleDropdown} className="inline-flex min-h-10 pt-1 pb-1 pl-6 pr-6 leading-4 text-center items-center justify-center rounded-3xl font-semibold text-(--text-color-1) border-[#c0bdb8] border text-base cursor-pointer hover:bg-[#2525250d]">
+                            <button onClick={toggleDropdown} className="inline-flex min-h-10 pt-1 ml-3 pb-1 pl-6 pr-6 leading-4 text-center items-center justify-center rounded-3xl font-semibold text-(--text-color-1) border-[#c0bdb8] border text-base cursor-pointer hover:bg-[#2525250d]">
                                 <p className="h-6 mt-1">{selectedItem}</p>
                                 <ArrowDropDown className={`ml-2 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                             </button>
@@ -322,7 +334,7 @@ function HomePage() {
                             )}
 
 
-                            <div className="hidden md:flex">
+                            <div className="hidden lg:flex mr-4">
                                 <button onClick={() => navigateSlide('prev')} className="w-8 h-8 bg-[#0000] border border-[#c0bdb8] text-1 rounded-4xl justify-center items-center cursor-pointer inline-flex hover:bg-[#2525250d] mr-2">
                                     <ArrowBack />
                                 </button>
@@ -589,13 +601,16 @@ function HomePage() {
                                         <ArrowForwardIosIcon className="text-white text-center border border-[#ccc] pl-[10px] bg-black w-9! h-9! p-2 rounded-full group-hover:text-1 group-hover:bg-white" />
                                     </div>
                                     <p className="pt-6 mb-4 text-[#6f6f6f] text-xl">
-                                    Les fonds sont remis à l'association à but non lucratif de votre choix                                    </p>
+                                        Les fonds sont remis à l'association à but non lucratif de votre choix                                    </p>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </section>
             </div>
+            {showButton && <div className="block lg:hidden fixed z-[99] bg-white w-full! p-4! bottom-0 animate-fadeIn h-20">
+                <a href="#" className="flex h-12 bg-[#008044] text-white font-bold text-lg rounded-[1.5625rem] py-[.6875rem] px-[1rem] items-center justify-center shadow hover:bg-[#015d32] transition-colors">Démarrer une cagnotte</a>
+            </div>}
         </div>
     );
 }
