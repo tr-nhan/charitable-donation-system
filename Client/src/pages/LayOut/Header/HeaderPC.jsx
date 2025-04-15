@@ -235,7 +235,7 @@ function HeaderPC() {
                     <DropDown
                         right={true}
                         name={userInfo.full_name}
-                        iconStart={<Avatar src={userInfo.profile_picture} alt="User Avatar" />}
+                        iconStart={<Avatar src={userInfo.profile_image} alt="User Avatar" />}
                         sx={{ marginRight: "100px" }}>
                         <List disablePadding sx={{ width: "150px" }}>
                             {USER.map((item, index) => {

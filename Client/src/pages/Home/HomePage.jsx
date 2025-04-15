@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { ArrowBack, ArrowForward, ArrowDropDown } from "@mui/icons-material";
 import TrackChangesIcon from "@mui/icons-material/TrackChanges";
 import CampaignIcon from "@mui/icons-material/Campaign";
@@ -104,6 +105,7 @@ const contentPages = [
 ];
 
 function HomePage() {
+    const navigate = useNavigate()
     const [isOpen, setIsOpen] = useState(false);
     //dropdown menu
     const [selectedItem, setSelectedItem] = useState("International news");
@@ -219,13 +221,14 @@ function HomePage() {
 
     return (
         <div className="relative bg-white flex flex-col min-h-[calc(100vh-56px)]">
-            <section className="relative h-[40rem] sm:h-[48rem] md:h-[56rem] md:mb-16 mb-10">
+            <section className="relative w-full h-[40rem] sm:h-[48rem] md:h-[56rem] md:mb-16 mb-10 overflow-x-hidden">
                 <div
                     className="fixed mt-20 top-0 left-0 w-full h-full bg-no-repeat bg-cover bg-center"
                     style={{
                         backgroundImage: `url(${bgImage})`,
                         height: "100vh",
-                        maxHeight: "630px"
+                        maxHeight: "630px",
+                        width: "100vw"
                     }}>
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
                         <h1 className="max-w-2xs mt-0 mb-6 font-semibold text-xl text-[var(--text-color-2)] animate-fadeIn select-none">
@@ -234,14 +237,14 @@ function HomePage() {
                         <h2 className="max-w-2xs font-semibold text-6xl mt-0 mb-0 text-[var(--text-color-2)] animate-fadeIn select-none">
                             Charity platform
                         </h2>
-                        <button className="font-semibold text-[var(--text-color-3)] mt-12 px-6 py-2 bg-white rounded-xl min-h-14 animate-fadeIn select-none cursor-pointer hover:bg-[#ffffffcc] transition-colors">
+                        <button onClick={() => navigate("/create-campaign")} className="font-semibold text-[var(--text-color-3)] mt-12 px-6 py-2 bg-white rounded-xl min-h-14 animate-fadeIn select-none cursor-pointer hover:bg-[#ffffffcc] transition-colors">
                             Start a fundraiser  
                         </button>
                     </div>
                 </div>
             </section>
 
-            <div className="relative pb-10 bg-white pt-10 rounded-t-4xl z-10 mt-[-5rem]">
+            <div className="relative pb-10 bg-white pt-10 rounded-t-4xl z-10 mt-[-5rem] w-full">
                 <div className="mt-0 mb-0 mx-auto pl-4 pr-4 max-w-[75%]">
                     <h2 className="mt-12 mb-10 mr-0 ml-0 font-bold text-2xl text-[#252525]">
                         Discover fundraisers related to your interests

@@ -12,8 +12,31 @@ const getUserInfo = async (filters) => {
         console.log(error);
         return { error: 400, message: "Client fault" };
     }
+};
+
+const updateAvatar = async (formData) => {
+    try {
+        const res = await axios.post(`${SERVER_URL}/update/avatar`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+            withCredentials: true,
+        });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        return { error: 400, message: "Client fault" };
+    }
+};
+
+const updateUser = async (data) => {
+    try {
+        const res = await axios.post(`${SERVER_URL}/update`, data, { withCredentials: true });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        return { error: 400, message: "Client fault" };
+    }
 }
 
-export {
-    getUserInfo,
-}
+export { getUserInfo, updateAvatar, updateUser };

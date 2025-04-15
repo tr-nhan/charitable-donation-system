@@ -10,6 +10,19 @@ pool.on('error', (err) => {
     console.error('Unexpected error on idle PostgreSQL client', err);
 });
 
+// const updateDB = async () => {
+//     try {
+//         await pool.query("alter table users add column if not exists private boolean default false;");
+//         console.log("Success");
+        
+//     } catch (error) {
+//         console.log(error);
+        
+//     }
+// }
+
+// updateDB();
+
 console.log("Database pool has been initialized!");
 
 module.exports = pool;

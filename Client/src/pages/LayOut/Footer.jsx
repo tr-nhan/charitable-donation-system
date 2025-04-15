@@ -10,7 +10,7 @@ function Footer() {
         setIsOpen(!isOpen);
     }
     return (
-        <footer className="w-full mt-auto bg-white pt-12 pb-12 border-t border-gray-300 relative">
+        <footer className="w-full mt-auto bg-white pt-12 pb-12 border-t border-gray-300 relative overflow-x-hidden">
             <div className="container mx-auto px-4 pb-12 max-w-7xl relative">
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                     {/* Support Column */}

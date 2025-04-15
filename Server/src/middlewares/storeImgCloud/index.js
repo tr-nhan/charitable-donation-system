@@ -3,15 +3,24 @@ const { CloudinaryStorage } = require("multer-storage-cloudinary")
 
 const cloudinary = require("../../config/cloudinary")
 
-const storage = new CloudinaryStorage({
-    cloudinary,
-    params: {
-        folder: () => "campaign_images",
-    }
+const storage = (folder) => {
+    return new CloudinaryStorage({
+        cloudinary,
+        params: {
+            folder: () => folder,
+        }
+    })
+}
+
+const uploadCampaign = multer({
+    storage: storage("campaign_images"),
 })
 
-const upload = multer({
-    storage
+const uploadAvatar = multer({
+    storage: storage("user_avatars"),
 })
 
-module.exports = upload
+module.exports = {
+    uploadCampaign,
+    uploadAvatar,
+}
