@@ -2,22 +2,22 @@ const pool = require("../configDB");
 
 const getInfoFilter = async (data) => {
     try {
-        const pairs = data
-            .reduce((acc, curr) => {
-                const key = Object.keys(curr)[0];
-                const value = curr[key];
+        const keys = Object.keys(data);
+        const values = Object.values(data);
 
-                const formattedValue = typeof value === "string" ? `'${value}'` : value;
+        if (keys.length === 0) {
+            throw new Error("No filters provided");
+        }
 
-                return acc + `${key}=${formattedValue} AND `;
-            }, "")
-            .slice(0, -5);
+        const conditions = keys.map((key, index) => `${key} = $${index + 1}`);
+        const query = `SELECT * FROM users WHERE ${conditions.join(" AND ")}`;
 
-        const userInfo = await pool.query(`SELECT * FROM users WHERE ${pairs}`);
+        const userInfo = await pool.query(query, values);
 
         return userInfo.rows;
     } catch (error) {
-        console.log(error);
+        console.error("Error filtering user info:", error);
+        throw error;
     }
 };
 
@@ -53,7 +53,7 @@ const updateUserAvatarInDatabase = async (userId, newAvatar) => {
 };
 
 const updateUserInfo = async (dataChange, user_id) => {
-    try {        
+    try {
         const fields = Object.keys(dataChange).map((key, index) => `${key} = $${index + 1}`);
         const values = Object.values(dataChange);
 
@@ -61,17 +61,17 @@ const updateUserInfo = async (dataChange, user_id) => {
         values.push(user_id);
 
         const result = await pool.query(query, values);
-        
+
         return result.rows[0];
     } catch (error) {
         console.error("Error updating user info:", error);
         throw error;
     }
-}
+};
 
 module.exports = {
     getInfoFilter,
     insertUser,
     updateUserAvatarInDatabase,
-    updateUserInfo,
+    updateUserInfo
 };

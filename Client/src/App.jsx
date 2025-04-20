@@ -31,12 +31,14 @@ function App() {
                 </Route>
                 <Route path="/create-campaign" element={<CreateCampaign />} />
             </Route>
+
             <Route element={<LayOut />}>
                 {/* Services */}
                 <Route path="login-success" element={<LoginSuccess />} />
 
                 <Route path="/" element={<Home />} />
             </Route>
+            
             <Route element={<PrivateRoute />}>
                 <Route path="/create-campaign" element={<CreateCampaign />} />
                 <Route path="/campaign/:id" element={<CampaignDetail />} />

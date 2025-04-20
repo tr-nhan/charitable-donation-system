@@ -1,7 +1,9 @@
-const { getInfoFilter } = require("../models/query/usersQuery");
-
 const deleteImageFromCloudinary = require("../middlewares/deleteImgCloud");
-const { updateUserAvatarInDatabase, updateUserInfo } = require("../models/query/usersQuery");
+const {
+    updateUserAvatarInDatabase,
+    updateUserInfo,
+    getInfoFilter
+} = require("../models/query/usersQuery");
 
 const getUser = async (req, res) => {
     const filters = req.query;
@@ -9,14 +11,7 @@ const getUser = async (req, res) => {
     try {
         if (Object.keys(filters).length === 0) return res.json({ error: 0, results: [] });
 
-        const keys = Object.keys(filters);
-        const valuesQuery = keys.map((key) => {
-            return {
-                [keys]: filters[key]
-            };
-        });
-
-        let userInfo = await getInfoFilter(valuesQuery);
+        let userInfo = await getInfoFilter(filters);
 
         if (userInfo.length > 0) {
             userInfo = userInfo.map((user) => ({
@@ -65,8 +60,6 @@ const updateUserInfoController = async (req, res) => {
         if (!dataChange) return res.status(400).json({ error: 2, message: "No data to update" });
 
         const updatedUser = await updateUserInfo(dataChange, user_id);
-        console.log(updatedUser);
-        
 
         res.json({ error: 0, results: updatedUser });
     } catch (error) {
@@ -78,5 +71,5 @@ const updateUserInfoController = async (req, res) => {
 module.exports = {
     getUser,
     updateAvatar,
-    updateUserInfoController,
+    updateUserInfoController
 };

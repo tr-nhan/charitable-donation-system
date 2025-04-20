@@ -82,7 +82,7 @@ const checkLogin = async (req, res) => {
 
         if (!user_id || !email) return res.json({ error: 2, message: "Token is incorrect" });
 
-        let user = await getInfoFilter([{ user_id }, { email }]);
+        let user = await getInfoFilter({ user_id, email });
 
         if (user.length === 0) return res.json({ error: 3, message: "User not found" });
 
@@ -100,14 +100,14 @@ const verifySignUp = async (req, res) => {
         if (!email)
             return res.status(400).json({ error: 2, message: "Missing some requied fields" });
 
-        const isExisted = await getInfoFilter([{ email }, { provider: "local" }]);
+        const isExisted = await getInfoFilter({ email, provider: "local" });
 
         if (isExisted.length > 0)
             return res.json({ error: 3, message: "This email has been existed" });
 
         const token = await jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn: "10m" });
 
-        const url = `${process.env.CLIENT_URL}/verify/sign-up?token=${token}`;        
+        const url = `${process.env.CLIENT_URL}/verify/sign-up?token=${token}`;
 
         await verifySignUpMail(url, email, "CHARITY DONATION UIT: Verify Account");
 
@@ -126,8 +126,8 @@ const handleVerifyAccount = async (req, res) => {
 
         if (!email) return res.json({ error: 2 });
 
-        const isExisted = await getInfoFilter([{ email }, { provider: "local" }]);
-        
+        const isExisted = await getInfoFilter({ email, provider: "local" });
+
         if (isExisted.length > 0)
             return res.json({ error: 3, message: "This email has already been verified" });
 
@@ -149,12 +149,12 @@ const handleVerifyAccount = async (req, res) => {
 
 const signUpAccount = async (req, res) => {
     const { email, password, full_name } = req.body;
-    
+
     try {
         if (!email || !password || !full_name)
             return res.status(400).json({ error: 2, message: "Missing some required fields" });
 
-        const isExisted = await getInfoFilter([{ email }, { provider: "local" }]);
+        const isExisted = await getInfoFilter({ email, provider: "local" });
 
         if (isExisted.length > 0)
             return res.json({ error: 3, message: "This email has been existed" });

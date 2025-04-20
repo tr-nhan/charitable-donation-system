@@ -23,12 +23,19 @@ function EditBioMobile({ open, onClose, setNewBio }) {
         }
     }, [open]);
 
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, []);
+
     if (!show) return null;
 
     const handleSaveBio = () => {
         setInputBio("");
         setWords(0);
-        
+
         const fetchUpdateUser = async () => {
             try {
                 const res = await updateUser({ bio: inputBio });
