@@ -1,6 +1,6 @@
 const { getCategoriesCampaigns } = require("../models/query/campaignsQuery");
 
-const { insertCampaign } = require("../models/query/campaignsQuery");
+const { insertCampaign, getCampaignsFilter } = require("../models/query/campaignsQuery");
 
 const getCategories = async (req, res) => {
     try {
@@ -40,7 +40,25 @@ const createCampaign = async (req, res) => {
     }
 };
 
+const getInfoCampaignsByUser = async (req, res) => {
+    try {        
+        const userId = req.params.userId;
+
+        if (!userId) {
+            return res.status(400).json({ error: 2, message: "User ID is required" });
+        }
+        const filter = { creator_id: userId };
+        const campaignsInfo = await getCampaignsFilter(filter);
+
+        return res.status(200).json({ error: 0, results: campaignsInfo });
+    } catch (error) {
+        console.error("Error filtering user info:", error);
+        return res.status(500).json({ error: 1, message: "Server is broken" });
+    }
+}
+
 module.exports = {
     getCategories,
-    createCampaign
+    createCampaign,
+    getInfoCampaignsByUser,
 };

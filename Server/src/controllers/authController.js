@@ -49,7 +49,7 @@ const loginWithGoogle = (req, res) => {
     const token = jwt.sign({ user_id: user.user_id, email: user.email }, process.env.SECRET_KEY, {
         expiresIn: "7d"
     });
-
+    
     res.cookie("token", token, {
         httpOnly: true,
         secure: true,

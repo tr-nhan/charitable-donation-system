@@ -162,7 +162,7 @@ function Footer() {
                         </a>
                     </div>
                     <div className="flex flex-col md:flex-row md:items-center flex-wrap -ml-2">
-                        <span class="text-[#6f6f6f] mx-2">© 2010-2025 GoFundUIT</span>
+                        <span className="text-[#6f6f6f] mx-2">© 2010-2025 GoFundUIT</span>
                         <a
                             href="#"
                             className="my-0 mr-2 px-2 py-1 cursor-pointer text-lg text-1 hover:bg-gray-100 rounded-xl transition-colors">

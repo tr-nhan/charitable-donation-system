@@ -10,6 +10,27 @@ const getCategoriesCampaigns = async () => {
     }
 };
 
+const getCampaignsFilter = async (filter) => {
+    try {
+        const keys = Object.keys(filter);
+        const values = Object.values(filter);
+
+        if (keys.length === 0) {
+            throw new Error("No filters provided");
+        }
+
+        const conditions = keys.map((key, index) => `${key} = $${index + 1}`);
+        const query = `SELECT * FROM campaigns WHERE ${conditions.join(" AND ")}`;
+
+        const campaignsInfo = await pool.query(query, values);
+
+        return campaignsInfo.rows;
+    } catch (error) {
+        console.error("Error filtering user info:", error);
+        throw error;
+    }
+};
+
 const insertCampaign = async (campaignData) => {
     try {
         const query = `
@@ -42,4 +63,5 @@ const insertCampaign = async (campaignData) => {
 module.exports = {
     getCategoriesCampaigns,
     insertCampaign,
+    getCampaignsFilter,
 };

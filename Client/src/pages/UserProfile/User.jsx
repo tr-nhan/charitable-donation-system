@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import "./customStyle.css";
 
 import { getUserInfo } from "../../services/api/userApi";
-import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -15,6 +14,7 @@ import EditBioMobile from "./components/editBioMobile";
 import ShareProfile from "./components/ShareProfile";
 import EditProfileMobile from "./components/EditProfileMobile";
 import EditProfilePc from "./components/EditProfilePc";
+import Loading from "../../components/UI/Loading";
 
 function User() {
     const isMobile = useMediaQuery("(max-width: 900px)");
@@ -187,18 +187,7 @@ function User() {
             </div>
 
             {/* Layer for Loading */}
-            {loading && (
-                <div className="fixed inset-0 z-50">
-                    <div className="absolute inset-0 bg-black opacity-50"></div>
-                    <div className="relative flex h-full w-full items-center justify-center">
-                        <div className="flex gap-1 text-5xl font-bold text-green-950">
-                            <span className="bounce-dot bounce-delay-0">.</span>
-                            <span className="bounce-dot bounce-delay-1">.</span>
-                            <span className="bounce-dot bounce-delay-2">.</span>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {loading && <Loading />}
 
             {/* Dialog edit Bio */}
             {isMobile ? (

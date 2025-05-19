@@ -10,7 +10,7 @@ router.post("/login/local", authController.loginWithLocal);
 router.get("/login/google", passport.authenticate('google', { scope: ['profile', 'email'], session: false }))
 
 router.get("/login/google/callback", 
-    passport.authenticate('google', { failureRedirect: `${process.env.CLIENT_URL}/login`, session: false }),
+    passport.authenticate('google', { failureRedirect: `${process.env.CLIENT_URL}/sign-in`, session: false }),
     authController.loginWithGoogle
 )
 

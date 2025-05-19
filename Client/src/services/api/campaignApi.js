@@ -27,4 +27,14 @@ const createCampaign = async (formData) => {
     }
 };
 
-export { getCategoriesCampaign, createCampaign };
+const getCampaignsByUser = async (userId) => {
+    try {
+        const res = await axios.get(`${SERVER_URL}/user/${userId}`, { withCredentials: true });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        return { error: 400, message: "Client fault" };
+    }
+};
+
+export { getCategoriesCampaign, createCampaign, getCampaignsByUser };

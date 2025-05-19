@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import { checkToken } from "../../services/api/authApi";
+import Loading from "../UI/Loading";
 
 function VerifyComponent() {
     const [verify, setVerify] = useState(false);
@@ -12,7 +13,7 @@ function VerifyComponent() {
         const params = new URLSearchParams(location.search);
         const token = params.get("token");
 
-        if (!token) return <p>...loading</p>;
+        if (!token) return <Loading />;
 
         const fetch = async () => {
             setLoading(false);
@@ -30,7 +31,7 @@ function VerifyComponent() {
     return (
         <div className="flex justify-center items-center">
             {loading && <p>{verify ? "Verify successfully" : "Verify fail, please try again"}</p>}
-            {!loading && <p>...loading</p>}
+            {!loading && <Loading />}
         </div>
     );
 }

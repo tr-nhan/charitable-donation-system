@@ -11,15 +11,19 @@ pool.on('error', (err) => {
 });
 
 // const updateDB = async () => {
+//     const query = `
+//         ALTER TABLE user_balances
+//     ADD PRIMARY KEY (user_id);
+
+//     `;
+
 //     try {
-//         await pool.query("alter table users add column if not exists private boolean default false;");
-//         console.log("Success");
-        
+//         await pool.query(query);
+//         console.log("Schema updated successfully");
 //     } catch (error) {
-//         console.log(error);
-        
+//         console.error("Error updating schema:", error);
 //     }
-// }
+// };
 
 // updateDB();
 

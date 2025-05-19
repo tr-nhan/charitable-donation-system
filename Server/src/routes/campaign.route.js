@@ -15,4 +15,7 @@ router.post(
     campaignController.createCampaign
 );
 
+// get campaigns by user /api/campaigns/user/:userId [GET]
+router.get("/user/:userId", verifyLogIn, campaignController.getInfoCampaignsByUser);
+
 module.exports = router;

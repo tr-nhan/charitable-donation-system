@@ -114,6 +114,10 @@ const USER = [
         path: "/profile"
     },
     {
+        title: "Your Balance",
+        path: "/balance"
+    },
+    {
         title: "My Fundraisers",
         path: "/my-fundraisers"
     },
@@ -269,17 +273,17 @@ function HeaderPC() {
                                 }}
                                 sx={{
                                     marginTop: 2,
-                                    backgroundColor: "#ff0f10",
+                                    // backgroundColor: "#ff0f10",
                                     marginY: 1,
                                     paddingY: "10px",
                                     paddingX: "20px",
                                     width: "100%",
                                     cursor: "pointer",
                                     borderRadius: "10px",
-                                    color: "white",
+                                    // color: "white",
                                     fontWeight: "600"
                                 }}>
-                                <div className="flex flex-row gap-2">Log Out</div>
+                                <div className="flex flex-row gap-2">Sign Out</div>
                             </ListItem>
                         </List>
                     </DropDown>

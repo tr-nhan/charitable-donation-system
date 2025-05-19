@@ -8,7 +8,6 @@ require("dotenv").config();
 const { setupSocket } = require("./config/socket");
 const app = express();
 const server = http.createServer(app);
-const verifyLogin = require("./middlewares/auth/verifyLogin");
 
 setupSocket(server);
 
@@ -40,8 +39,16 @@ const campaignRouter = require("./routes/campaign.route");
 app.use("/api/campaign", campaignRouter);
 
 // Services Router
-const servicesRouter = require("./routes/services.route")
-app.use("/api/services", servicesRouter)
+const servicesRouter = require("./routes/services.route");
+app.use("/api/services", servicesRouter);
+
+// Transaction Router
+const transactionRouter = require("./routes/transaction.route");
+app.use("/api/transaction", transactionRouter);
+
+// User balance Router
+const userBalanceRouter = require("./routes/userBalance.route");
+app.use("/api/balance", userBalanceRouter);
 
 server.listen(process.env.PORT, () => {
     console.log(`Server is running at PORT ${process.env.PORT}`);

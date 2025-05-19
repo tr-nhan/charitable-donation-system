@@ -1,3 +1,4 @@
+const { query } = require("express");
 const pool = require("../configDB");
 
 const getInfoFilter = async (data) => {
@@ -10,8 +11,8 @@ const getInfoFilter = async (data) => {
         }
 
         const conditions = keys.map((key, index) => `${key} = $${index + 1}`);
-        const query = `SELECT * FROM users WHERE ${conditions.join(" AND ")}`;
-
+        const query = `SELECT email, full_name, provider, profile_image, bio, phone, is_verified, private, user_id FROM users WHERE ${conditions.join(" AND ")}`;
+        
         const userInfo = await pool.query(query, values);
 
         return userInfo.rows;
@@ -21,6 +22,17 @@ const getInfoFilter = async (data) => {
     }
 };
 
+const getPassword = async (user_id) => {
+        try {            
+            const userInfo = await pool.query('SELECT password_hash FROM users WHERE user_id = $1', [user_id]);
+            
+            return userInfo.rows[0];
+        } catch (error) {
+            console.error("Error hashing password:", error);
+            throw error;
+        }
+}
+
 const insertUser = async (data) => {
     try {
         const fields = data.map((obj) => Object.keys(obj)[0]);
@@ -29,7 +41,7 @@ const insertUser = async (data) => {
 
         const placeholders = values.map((_, index) => `$${index + 1}`).join(", ");
 
-        const query = `INSERT INTO users (${fields.join(", ")}) VALUES (${placeholders}) RETURNING *`;
+        const query = `INSERT INTO users (${fields.join(", ")}) VALUES (${placeholders}) RETURNING email, full_name, provider, profile_image, bio, phone, is_verified, private, user_id`;
 
         const result = await pool.query(query, values);
 
@@ -41,7 +53,7 @@ const insertUser = async (data) => {
 
 const updateUserAvatarInDatabase = async (userId, newAvatar) => {
     try {
-        const query = `UPDATE users SET profile_image = $1 WHERE user_id = $2 RETURNING *`;
+        const query = `UPDATE users SET profile_image = $1 WHERE user_id = $2 RETURNING email, full_name, provider, profile_image, bio, phone, is_verified, private, user_id`;
         const values = [newAvatar, userId];
 
         const result = await pool.query(query, values);
@@ -57,7 +69,7 @@ const updateUserInfo = async (dataChange, user_id) => {
         const fields = Object.keys(dataChange).map((key, index) => `${key} = $${index + 1}`);
         const values = Object.values(dataChange);
 
-        const query = `UPDATE users SET ${fields.join(", ")} WHERE user_id = $${values.length + 1} RETURNING *`;
+        const query = `UPDATE users SET ${fields.join(", ")} WHERE user_id = $${values.length + 1} RETURNING email, full_name, provider, profile_image, bio, phone, is_verified, private, user_id`;
         values.push(user_id);
 
         const result = await pool.query(query, values);
@@ -73,5 +85,6 @@ module.exports = {
     getInfoFilter,
     insertUser,
     updateUserAvatarInDatabase,
-    updateUserInfo
+    updateUserInfo,
+    getPassword,
 };
