@@ -6,48 +6,60 @@ import { BsChatSquareText } from "react-icons/bs";
 import { SiTinyletter } from "react-icons/si";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Box, Button } from "@mui/material";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import RichText from "../../../components/UI/RichText";
 
-import { enhanceText as enhanceTextFnc } from "../../../services/api/servicesApi";
+// import { enhanceText as enhanceTextFnc } from "../../../services/api/servicesApi";
 
 function MainInfoCampaign({ setData, saveData }) {
     const [inputValue, setInputValue] = useState({
         title: saveData.title || "",
-        description: saveData.description || "",
+        description: saveData.description || ""
     });
-    const [words, setWords] = useState(0);
-    const [enhanceText, setEnhanceText] = useState("");
-    const [openDialog, setOpenDialog] = useState(false);
-    const [loading, setLoading] = useState(false);
+    // const [words, setWords] = useState(0);
+    // const [enhanceText, setEnhanceText] = useState("");
+    // const [openDialog, setOpenDialog] = useState(false);
+    // const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        setData({ title: inputValue.title, description: inputValue.description })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [inputValue])
+        setData({ title: inputValue.title, description: inputValue.description });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [inputValue]);
 
-    const handleEnhance = () => {
-        if (words < 50) return;
+    const handleChangeDescription = (content) => {
+        // const text = inputValue.description
+        //     .replace(/<[^>]*>/g, " ")
+        //     .replace(/\s+/g, " ")
+        //     .trim();
 
-        const fetch = async () => {
-            setLoading(true);
-            try {
-                const res = await enhanceTextFnc(inputValue.description);
-
-                if (res.error === 0) {
-                    setEnhanceText(res.results);
-                    setOpenDialog(true);
-                }
-            } catch (error) {
-                console.error("Enhancement failed:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetch();
+        // setWords(text.length === 0 ? 0 : text.split(" ").length);
+        setInputValue((prev) => ({ ...prev, description: content }));
     };
 
+    // const handleEnhance = () => {
+    //     if (words < 50) return;
+
+    //     const fetch = async () => {
+    //         setLoading(true);
+    //         try {
+    //             const res = await enhanceTextFnc(inputValue.description);
+
+    //             if (res.error === 0) {
+    //                 setEnhanceText(res.results);
+    //                 setOpenDialog(true);
+    //             }
+    //         } catch (error) {
+    //             console.error("Enhancement failed:", error);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     fetch();
+    // };
+
     return (
-        <div className="px-[160px] w-full flex flex-col justify-center items-start text-center leading-12 overflow-y-auto">
+        <div className="px-[160px] w-full h-dvh flex flex-col justify-center items-start overflow-y-auto">
+            {/* Title */}
             <input
                 type="text"
                 className="w-full outline-gray-500 border-gray-400 border-[1px] bg-transparent text-lg p-2 rounded-md"
@@ -57,24 +69,20 @@ function MainInfoCampaign({ setData, saveData }) {
                     setInputValue({ ...inputValue, title: e.target.value });
                 }}
             />
-            <textarea
-                name="description"
-                id=""
-                placeholder="Introduce yourself and what you're raising funds for..."
-                rows={0}
-                className="mt-2 p-2 min-h-[250px] outline-gray-500 border-gray-400 border-[1px] w-full rounded-md"
-                value={inputValue.description}
-                onChange={(e) => {
-                    setInputValue({ ...inputValue, description: e.target.value });
-                    setWords(() => {
-                        const wordCount = e.target.value
-                            .split(" ")
-                            .filter((word) => word.length > 0).length;
-                        return wordCount;
-                    });
-                }}
-            />
-            <div className="mt-5 p-5 w-full bg-[#f4f2ec] rounded-lg flex flex-col justify-between items-start gap-2">
+
+            {/* Description */}
+            <div className="w-full">
+                <RichText
+                    content={inputValue.description}
+                    onChange={handleChangeDescription}
+                    classCustom={
+                        "p-2 min-h-[250px] max-h-[400px] outline-gray-500 border-gray-400 border-[1px] rounded-md overflow-y-auto"
+                    }
+                />
+            </div>
+
+            {/* Enhance */}
+            {/* <div className="mt-5 p-5 w-full bg-[#f4f2ec] rounded-lg flex flex-col justify-between items-start gap-2">
                 <div className="w-full flex flex-row justify-between items-center">
                     <div className="flex flex-col justify-start items-center">
                         <strong className="text-[16px]">Strengthen your story</strong>
@@ -171,7 +179,7 @@ function MainInfoCampaign({ setData, saveData }) {
                         </DialogActions>
                     </Box>
                 </Box>
-            </Dialog>
+            </Dialog> */}
         </div>
     );
 }

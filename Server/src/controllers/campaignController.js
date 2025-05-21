@@ -1,6 +1,11 @@
 const { getCategoriesCampaigns } = require("../models/query/campaignsQuery");
 
-const { insertCampaign, getCampaignsFilter } = require("../models/query/campaignsQuery");
+const {
+    insertCampaign,
+    getCampaignsFilter,
+    getCampaignImgs,
+    getCampaignReactions
+} = require("../models/query/campaignsQuery");
 
 const getCategories = async (req, res) => {
     try {
@@ -32,8 +37,7 @@ const createCampaign = async (req, res) => {
 
         if (!newCampaign) return res.status(500).json({ error: 1, message: "Server is broken" });
 
-        return res.json({ error: 0, message: "Create successfully" })
-        
+        return res.json({ error: 0, message: "Create successfully" });
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 1, message: "Server is broken" });
@@ -41,7 +45,7 @@ const createCampaign = async (req, res) => {
 };
 
 const getInfoCampaignsByUser = async (req, res) => {
-    try {        
+    try {
         const userId = req.params.userId;
 
         if (!userId) {
@@ -55,10 +59,42 @@ const getInfoCampaignsByUser = async (req, res) => {
         console.error("Error filtering user info:", error);
         return res.status(500).json({ error: 1, message: "Server is broken" });
     }
-}
+};
+
+const getFullInfoCampaign = async (req, res) => {
+    const { campaignId } = req.body;
+    if (!campaignId) {
+        return res.status(400).json({ error: 1, message: "Missing some required fields" });
+    }
+    try {
+        var results = new Object();
+        var campaignInfo = await getCampaignsFilter({ campaign_id: campaignId });
+        var campaignImgs = await getCampaignImgs(campaignId);
+        var campaignReactions = await getCampaignReactions({ campaign_id: campaignId });
+
+        if (campaignInfo.length === 1) {
+            results.campaignInfo = campaignInfo;
+        } else return res.json({ error: 1, message: "Something when wrong" });
+
+        if (campaignImgs.length !== 0) {
+            var imgs = campaignImgs.image_url;
+            imgs = imgs.trim().split(",");
+            results.campaignImages = imgs;
+        } else results.campaignImages = [];
+
+        if (campaignReactions.length !== 0) {
+            
+        }
+        return res.json({ error: 0, results });
+    } catch (error) {
+        console.error("Error filtering user info:", error);
+        return res.status(500).json({ error: 1, message: "Server is broken" });
+    }
+};
 
 module.exports = {
     getCategories,
     createCampaign,
     getInfoCampaignsByUser,
+    getFullInfoCampaign
 };

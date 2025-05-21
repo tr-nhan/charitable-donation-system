@@ -8,7 +8,18 @@ const enhanceText = async (req, res) => {
     if (!text) return res.status(400).json({ error: 1, message: "Missing some required fields" });
 
     try {
-        const prompt = `Enhance the following text for charity, checking grammar, and professional tone, it is a description charity should be less than 70 words (just give me a enhanced text): ${text}`;
+        const prompt = `
+            You are an AI writing assistant helping to improve a charity campaign description written in HTML format.
+
+            Instructions:
+            - Enhance the content to make it more professional, emotional, and grammatically correct.
+            - Improve clarity, tone, and word choice.
+            - Preserve all HTML tags and structure exactly as they are (do not remove or modify tags).
+            - Only change the textual content within the tags.
+
+            Here is the original HTML content:
+            ${text}
+        `;
 
         let response = await useCohere(prompt);
 

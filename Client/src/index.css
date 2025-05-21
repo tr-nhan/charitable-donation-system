@@ -53,3 +53,16 @@
 .animate-spinReverse {
     animation: spinReverse 0.5s ease-in-out forwards;
 }
+@layer base {
+    h1 {
+        font-size: 1.4rem;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    h3 {
+        font-size: 1.1rem;
+    }
+}

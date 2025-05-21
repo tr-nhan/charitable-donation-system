@@ -11,7 +11,8 @@ import {
     CampaignDetail,
     UserProfile,
     BalanceManagement,
-    Deposit
+    Deposit,
+    PageNotFound
 } from "./pages";
 import { GuestRoute, PrivateRoute } from "./components/FilterRoutes";
 import {
@@ -53,8 +54,8 @@ function App() {
                 <Route path="/" element={<Home />} />
             </Route>
 
-            
             <Route path="login-success" element={<LoginSuccess />} />
+            <Route path="*" element={<PageNotFound />} />
             <Route path="/deposit/:method/payment-success" element={<DepositSuccess />} />
             <Route path="/deposit/:method/payment-cancelled" element={<DepositUnsuccess />} />
 

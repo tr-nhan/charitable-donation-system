@@ -101,7 +101,7 @@ function CreateCampaign() {
                 </span>
             </div>
             <div
-                className="w-2/3 h-full flex flex-col justify-center items-center bg-white shadow-2xl"
+                className="w-2/3 h-full flex flex-col justify-center items-center bg-white shadow-2xl overflow-y-auto"
                 style={{ borderTopLeftRadius: "60px" }}>
                 <currentComponent.main setData={setData} saveData={campaignInfo} />
                 <div className="w-full h-1/12 flex flex-row justify-start items-center">
