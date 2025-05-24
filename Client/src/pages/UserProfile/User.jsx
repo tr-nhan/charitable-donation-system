@@ -8,7 +8,6 @@ import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 
 import bgShareProfile from "../../assets/images/bgShareProfile.jpg";
-import NoAvatar from "../../assets/images/NoAvatar.jpg";
 import { updateAvatar, updateUser } from "../../services/api/userApi";
 import EditBioMobile from "./components/editBioMobile";
 import ShareProfile from "./components/ShareProfile";

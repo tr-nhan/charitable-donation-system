@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
@@ -37,7 +37,7 @@ const COMPONENTS = [
 ];
 
 function CreateCampaign() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [currentComponent, setCurrentComponent] = useState(COMPONENTS[0]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [campaignInfo, setCampaignInfo] = useState({});
@@ -53,7 +53,7 @@ function CreateCampaign() {
     useEffect(() => {
         if (currentIndex === 0 && campaignInfo.category) {
             setAllowContinue(true);
-        } else if (currentIndex === 1 && campaignInfo.goal_amount?.trim()) {
+        } else if (currentIndex === 1 && campaignInfo.goal_fiat?.trim()) {
             setAllowContinue(true);
         } else if (
             currentIndex === 2 &&
@@ -74,7 +74,7 @@ function CreateCampaign() {
         Object.entries(campaignInfo).forEach(([key, value]) => {
             if (key === "campaign_image" && value) {
                 formData.append(key, value);
-            } else if (key === "goal_amount") {
+            } else if (key === "goal_fiat" || key === "goal_crypto") {
                 formData.append(key, Number(value.replace(/,/g, "")));
             } else {
                 formData.append(key, value);
@@ -84,7 +84,7 @@ function CreateCampaign() {
         try {
             setLoadingCreate(true);
             const res = await createCampaign(formData);
-            if (res.error === 0) navigate("/")
+            if (res.error === 0) navigate("/");
         } catch (error) {
             console.log(error);
         } finally {

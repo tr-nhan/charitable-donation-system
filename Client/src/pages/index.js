@@ -8,3 +8,4 @@ export { default as UserProfile } from "./UserProfile";
 export { default as BalanceManagement } from "./BalanceManagement";
 export { default as Deposit } from "./Deposit";
 export { default as PageNotFound } from "./PageNotFound";
+export { default as CampaignInfo } from "./CampaignInfo";

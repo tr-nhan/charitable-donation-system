@@ -14,11 +14,10 @@ const getCategoriesCampaign = async () => {
 
 const createCampaign = async (formData) => {
     try {
-        const res = await axios.post(
-            `${SERVER_URL}/create`,
-            formData,
-            { withCredentials: true, headers: { "Content-Type": "multipart/form-data" } }
-        );
+        const res = await axios.post(`${SERVER_URL}/create`, formData, {
+            withCredentials: true,
+            headers: { "Content-Type": "multipart/form-data" }
+        });
 
         return res.data;
     } catch (error) {
@@ -37,4 +36,66 @@ const getCampaignsByUser = async (userId) => {
     }
 };
 
-export { getCategoriesCampaign, createCampaign, getCampaignsByUser };
+const getFullInfoCampaignById = async (campaignId) => {
+    try {
+        const res = await axios.post(
+            `${SERVER_URL}/full_info`,
+            { campaignId },
+            { withCredentials: true }
+        );
+
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        return { error: 400, message: "Client fault" };
+    }
+};
+
+const insertCampaignReaction = async (data) => {
+    try {
+        const res = await axios.post(`${SERVER_URL}/reaction/insert`, data, {
+            withCredentials: true
+        });
+
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        return { error: 400, message: "Client fault" };
+    }
+};
+
+const updateCampaignReaction = async (data) => {
+    try {
+        const res = await axios.post(`${SERVER_URL}/reaction/update`, data, {
+            withCredentials: true
+        });
+
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        return { error: 400, message: "Client fault" };
+    }
+};
+
+const deleteCampaignReaction = async (data) => {
+    try {
+        const res = await axios.post(`${SERVER_URL}/reaction/delete`, data, {
+            withCredentials: true
+        });
+
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        return { error: 400, message: "Client fault" };
+    }
+};
+
+export {
+    getCategoriesCampaign,
+    createCampaign,
+    getCampaignsByUser,
+    getFullInfoCampaignById,
+    insertCampaignReaction,
+    updateCampaignReaction,
+    deleteCampaignReaction
+};

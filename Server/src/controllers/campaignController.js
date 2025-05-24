@@ -4,7 +4,11 @@ const {
     insertCampaign,
     getCampaignsFilter,
     getCampaignImgs,
-    getCampaignReactions
+    getCampaignReactions,
+    getDonations,
+    insertReaction,
+    updateReaction,
+    deleteReaction
 } = require("../models/query/campaignsQuery");
 
 const getCategories = async (req, res) => {
@@ -26,7 +30,8 @@ const createCampaign = async (req, res) => {
             creator_id: req.user.user_id,
             title: req.body.title,
             description: req.body.description,
-            goal_amount: req.body.goal_amount,
+            goal_fiat: req.body.goal_fiat,
+            goal_crypto: req.body.goal_crypto || 0,
             start_date: req.body.start_date || null,
             end_date: req.body.end_date || null,
             campaign_image: req.file?.path,
@@ -71,10 +76,27 @@ const getFullInfoCampaign = async (req, res) => {
         var campaignInfo = await getCampaignsFilter({ campaign_id: campaignId });
         var campaignImgs = await getCampaignImgs(campaignId);
         var campaignReactions = await getCampaignReactions({ campaign_id: campaignId });
+        var campaignDonations = await getDonations({ campaign_id: campaignId });
 
         if (campaignInfo.length === 1) {
-            results.campaignInfo = campaignInfo;
-        } else return res.json({ error: 1, message: "Something when wrong" });
+            const campaign = campaignInfo[0];
+
+            // if (campaign.update_time !== null) {
+            //     campaign.title = campaign.latest_title;
+            //     campaign.content = campaign.latest_content;
+            //     campaign.update_image = campaign.latest_image;
+            // } else campaign.update_time = 0;
+
+            // delete campaign.latest_title;
+            // delete campaign.latest_content;
+            // delete campaign.latest_image;
+
+            if (campaign.update_time === null) campaign.update_time = 0;
+
+            results.campaignInfo = campaign;
+        } else {
+            return res.json({ error: 1, message: "Something went wrong" });
+        }
 
         if (campaignImgs.length !== 0) {
             var imgs = campaignImgs.image_url;
@@ -83,11 +105,134 @@ const getFullInfoCampaign = async (req, res) => {
         } else results.campaignImages = [];
 
         if (campaignReactions.length !== 0) {
-            
+            const reactionStats = {
+                number_of_heart: 0,
+                number_of_thumb_up: 0,
+                number_of_thumb_down: 0,
+                number_of_smile: 0,
+                total_reaction: 0
+            };
+
+            for (const reaction of campaignReactions) {
+                switch (reaction.reaction_type) {
+                    case "heart":
+                        reactionStats.number_of_heart++;
+                        break;
+                    case "thumb_up":
+                        reactionStats.number_of_thumb_up++;
+                        break;
+                    case "thumb_down":
+                        reactionStats.number_of_thumb_down++;
+                        break;
+                    case "smile":
+                        reactionStats.number_of_smile++;
+                        break;
+                }
+
+                reactionStats.total_reaction++;
+            }
+
+            results.campaignReactions = {
+                data: campaignReactions,
+                stats: reactionStats
+            };
+        } else {
+            results.campaignReactions = {
+                data: [],
+                stats: {
+                    number_of_heart: 0,
+                    number_of_thumb_up: 0,
+                    number_of_thumb_down: 0,
+                    number_of_smile: 0,
+                    total_reaction: 0
+                }
+            };
         }
+
+        if (campaignDonations.donations.length !== 0) {
+            results.campaignDonations = {
+                stats: campaignDonations.summary,
+                data: campaignDonations.donations
+            };
+        } else {
+            results.campaignDonations = {
+                stats: campaignDonations.summary,
+                data: campaignDonations.donations
+            };
+        }
+
         return res.json({ error: 0, results });
     } catch (error) {
         console.error("Error filtering user info:", error);
+        return res.status(500).json({ error: 1, message: "Server is broken" });
+    }
+};
+
+const insertCampaignReaction = async (req, res) => {
+    try {
+        const { campaignId, reactionType } = req.body;
+        const userId = req.user.user_id;
+
+        if (!campaignId || !reactionType) {
+            return res.status(400).json({ error: 1, message: "Missing some required fields" });
+        }
+
+        // Insert the reaction into the database
+        const result = await insertReaction({ userId, campaignId, reactionType });
+
+        if (result) {
+            return res.status(200).json({ error: 0, message: "Reaction added successfully" });
+        } else {
+            return res.status(500).json({ error: 1, message: "Failed to add reaction" });
+        }
+    } catch (error) {
+        console.error("Error inserting campaign reaction:", error);
+        return res.status(500).json({ error: 1, message: "Server is broken" });
+    }
+};
+
+const updateCampaignReaction = async (req, res) => {
+    try {
+        const { campaignId, reactionType } = req.body;
+        const userId = req.user.user_id;
+
+        if (!campaignId || !reactionType) {
+            return res.status(400).json({ error: 1, message: "Missing some required fields" });
+        }
+
+        // Update the reaction in the database
+        const result = await updateReaction({ userId, campaignId, reactionType });
+
+        if (result) {
+            return res.status(200).json({ error: 0, message: "Reaction updated successfully" });
+        } else {
+            return res.status(500).json({ error: 1, message: "Failed to update reaction" });
+        }
+    } catch (error) {
+        console.error("Error updating campaign reaction:", error);
+        return res.status(500).json({ error: 1, message: "Server is broken" });
+    }
+};
+
+const deleteCampaignReaction = async (req, res) => {
+    try {
+        const { campaignId } = req.body;
+        const userId = req.user.user_id;
+
+        if (!campaignId) {
+            return res.status(400).json({ error: 1, message: "Missing some required fields" });
+        }
+
+        // Delete the reaction from the database
+        const result = await deleteReaction({ userId, campaignId });
+
+        if (result) {
+            return res.status(200).json({ error: 0, message: "Reaction deleted successfully" });
+        } else {
+            return res.status(500).json({ error: 1, message: "Failed to delete reaction" });
+        }
+    } catch (error) {
+        console.error("Error deleting campaign reaction:", error);
         return res.status(500).json({ error: 1, message: "Server is broken" });
     }
 };
@@ -96,5 +241,8 @@ module.exports = {
     getCategories,
     createCampaign,
     getInfoCampaignsByUser,
-    getFullInfoCampaign
+    getFullInfoCampaign,
+    insertCampaignReaction,
+    updateCampaignReaction,
+    deleteCampaignReaction
 };

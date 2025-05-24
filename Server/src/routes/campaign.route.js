@@ -21,4 +21,13 @@ router.get("/user/:userId", verifyLogIn, campaignController.getInfoCampaignsByUs
 // get full info of a campaign /api/campaign/full_info [POST]
 router.post("/full_info", campaignController.getFullInfoCampaign);
 
+// insert campaign reaction /api/campaign/reaction/insert [POST]
+router.post("/reaction/insert", verifyLogIn, campaignController.insertCampaignReaction);
+
+// update campaign reaction /api/campaign/reaction/update [POST]
+router.post("/reaction/update", verifyLogIn, campaignController.updateCampaignReaction);
+
+// delete campaign reaction /api/campaign/reaction/delete [POST]
+router.post("/reaction/delete", verifyLogIn, campaignController.deleteCampaignReaction);
+
 module.exports = router;
