@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Loading } from "../../components/UI";
 import { Select, MenuItem } from "@mui/material";
 
@@ -16,7 +17,15 @@ const formatCurrencyVND = (amount) => {
     }).format(parsed);
 };
 
+function getGreenShade(percent) {
+    if (percent < 25) return "#d1fae5";
+    if (percent < 50) return "#6ee7b7";
+    if (percent < 75) return "#34d399";
+    return "#059669"; // emerald-600
+}
+
 function SearchCampaign() {
+    const navigate = useNavigate();
     // paginatio
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
@@ -40,6 +49,8 @@ function SearchCampaign() {
     ];
     // debounce
     const debouncedSearch = useBounce(searchInput, 1000);
+    // loading
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -55,14 +66,20 @@ function SearchCampaign() {
             }
         };
         const fetchCampaigns = async () => {
-            const res = await getCampaignsByFilter({
-                page: 0,
-                fromGoal: 0,
-                toGoal: Number.MAX_SAFE_INTEGER
-            });
+            try {
+                setLoading(true);
+                const res = await getCampaignsByFilter({
+                    page: 1
+                });
 
-            if (res === 0) {
-                setCampaigns(res.results.data);
+                if (res.error === 0) {
+                    setCampaigns(res.results.data);
+                    setTotalPage(res.results.totalPage);
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -78,18 +95,26 @@ function SearchCampaign() {
         const parsedGoal = goal ? JSON.parse(goal) : null;
 
         const fetchCampaigns = async () => {
-            var filters = {
-                q: searchInput,
-                fromGoal: parsedGoal ? parsedGoal[0] || 0 : 0,
-                toGoal: parsedGoal
-                    ? parsedGoal[1] || Number.MAX_SAFE_INTEGER
-                    : Number.MAX_SAFE_INTEGER,
-                page
-            };
+            try {
+                setLoading(true);
+                var filters = {
+                    q: searchInput,
+                    fromGoal: parsedGoal ? parsedGoal[0] || 0 : 0,
+                    toGoal: parsedGoal
+                        ? parsedGoal[1] || Number.MAX_SAFE_INTEGER
+                        : Number.MAX_SAFE_INTEGER,
+                    page
+                };
 
-            const res = await getCampaignsByFilter(filters);
-            if (res.error === 0) {
-                setCampaigns(res.results.data);
+                const res = await getCampaignsByFilter(filters);
+                if (res.error === 0) {
+                    setCampaigns(res.results.data);
+                    setTotalPage(res.results.totalPage);
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
             }
         };
         fetchCampaigns();
@@ -103,22 +128,63 @@ function SearchCampaign() {
         const parsedGoal = goal ? JSON.parse(goal) : null;
 
         const fetchCampaigns = async () => {
-            var filters = {
-                q: searchInput,
-                fromGoal: parsedGoal ? parsedGoal[0] || 0 : 0,
-                toGoal: parsedGoal
-                    ? parsedGoal[1] || Number.MAX_SAFE_INTEGER
-                    : Number.MAX_SAFE_INTEGER,
-                page
-            };
+            try {
+                setLoading(true);
+                var filters = {
+                    q: searchInput,
+                    fromGoal: parsedGoal ? parsedGoal[0] || 0 : 0,
+                    toGoal: parsedGoal
+                        ? parsedGoal[1] || Number.MAX_SAFE_INTEGER
+                        : Number.MAX_SAFE_INTEGER,
+                    page
+                };
 
-            const res = await getCampaignsByFilter(filters);
-            if (res.error === 0) {
-                setCampaigns(res.results.data);
+                const res = await getCampaignsByFilter(filters);
+                if (res.error === 0) {
+                    setCampaigns(res.results.data);
+                    setTotalPage(res.results.totalPage);
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
             }
         };
         fetchCampaigns();
     };
+
+    const handleShowMore = () => {
+        const parsedGoal = goal ? JSON.parse(goal) : null;
+        const nextPage = page + 1;
+
+        const fetchCampaigns = async () => {
+            try {
+                setLoading(true);
+                var filters = {
+                    q: searchInput,
+                    fromGoal: parsedGoal ? parsedGoal[0] || 0 : 0,
+                    toGoal: parsedGoal
+                        ? parsedGoal[1] || Number.MAX_SAFE_INTEGER
+                        : Number.MAX_SAFE_INTEGER,
+                    page: nextPage
+                };
+
+                const res = await getCampaignsByFilter(filters);
+                if (res.error === 0) {
+                    setCampaigns((prev) => [...prev, ...res.results.data]);
+                    setTotalPage(res.results.totalPage);
+                    setPage(nextPage);
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchCampaigns();
+    };
+
+    if (loading) return <Loading />;
 
     return (
         <div className="px-4 md:px-24 py-10 w-full flex flex-col items-center justify-center gap-10">
@@ -297,9 +363,50 @@ function SearchCampaign() {
                 </button>
             </div>
 
-            {/* Campaign List Placeholder */}
-            <div className="w-full max-w-5xl">
-                
+            {/* Campaign List */}
+            <div className="w-full max-w-7xl mx-auto px-4 py-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {campaigns.map((c, i) => (
+                        <div
+                            key={i}
+                            className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 p-4 animate-fade-in cursor-pointer"
+                            onClick={() => navigate(`/campaign/discover/${c.campaign_id}`)}>
+                            <img
+                                src={c.campaign_image}
+                                alt="Campaign thumbnail"
+                                className="w-full h-40 object-cover rounded-xl mb-4"
+                            />
+                            <h2 className="text-lg font-semibold mb-1 truncate">{c.title}</h2>
+                            <p className="text-sm text-gray-600 mb-2">by {c.full_name}</p>
+                            {/* Custom Progress Bar */}
+                            <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
+                                <div
+                                    className={`h-full transition-all duration-500 rounded-full`}
+                                    style={{
+                                        width: `${(c.current_fiat / c.goal_fiat) * 100}%`,
+                                        backgroundColor: getGreenShade(
+                                            (c.current_fiat / c.goal_fiat) * 100
+                                        )
+                                    }}></div>
+                            </div>
+
+                            <b className="text-sm text-green-700">
+                                {formatCurrencyVND(c.current_fiat)} raised
+                            </b>
+                        </div>
+                    ))}
+                </div>
+
+                {/* pagination */}
+                {page < totalPage && (
+                    <div className="flex justify-center mt-8">
+                        <button
+                            onClick={handleShowMore}
+                            className="px-6 py-2 bg-green-600 text-white font-medium rounded-full shadow-md hover:bg-green-700 hover:shadow-lg transition-all duration-300">
+                            Show more
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );

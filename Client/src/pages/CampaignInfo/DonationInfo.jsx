@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Dialog, Avatar, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const formatCurrencyVND = (amount) => {
     const parsed = parseFloat(amount);
@@ -15,6 +16,7 @@ const formatCurrencyVND = (amount) => {
 import bgShareProfile from "../../assets/images/bgShareProfile.jpg";
 
 function DonationInfo({ campaign }) {
+    const navigate = useNavigate();
     // innit
     const info = campaign.campaignInfo;
     const donations = campaign.campaignDonations;
@@ -71,7 +73,9 @@ function DonationInfo({ campaign }) {
 
             {/* Action buttons */}
             <div className="flex gap-2">
-                <button className="flex-1 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition font-medium">
+                <button
+                    className="flex-1 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition font-medium cursor-pointer"
+                    onClick={() => navigate("/campaign/search")}>
                     Discover more
                 </button>
             </div>

@@ -347,7 +347,7 @@ const filterCampaignsWithPagination = async (q, fromGoal, toGoal, categoryId, pa
         `;
         const countResult = await pool.query(countQuery, values);
         const total = parseInt(countResult.rows[0].total, 10);
-        const totalPages = page === 0 ? 1 : Math.ceil(total / limit);
+        const totalPage = page === 0 ? 1 : Math.ceil(total / limit);
 
         // Query to get actual data
         const dataQuery = `
@@ -371,7 +371,7 @@ const filterCampaignsWithPagination = async (q, fromGoal, toGoal, categoryId, pa
 
         return {
             total,
-            totalPages,
+            totalPage,
             data: dataResult.rows
         };
     } catch (error) {

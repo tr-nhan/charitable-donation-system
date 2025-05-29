@@ -369,14 +369,18 @@ function CampaignInfo({ campaign }) {
 
             {/* List of Images */}
             {images.length > 0 && (
-                <div className="mt-6 py-3 px-5 overflow-x-auto max-w-[500px] md:max-w-[700px]">
-                    <div className="flex flex-row items-center gap-5 w-max">
+                <div className="mt-6 py-3 overflow-x-auto w-full">
+                    <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2 italic">
+                        Images
+                    </h2>
+                    <hr className="mb-4 border-[#e0ddd6]" />
+                    <div className="flex flex-row items-center gap-5 w-max mr-auto ml-auto">
                         {images.map((img, i) => (
                             <div
                                 key={i}
                                 className="w-[100px] h-[100px] rounded-lg overflow-hidden shrink-0">
                                 <img
-                                    src={img.url}
+                                    src={img}
                                     alt="Campaign_Img"
                                     className="w-full h-full object-cover"
                                 />
