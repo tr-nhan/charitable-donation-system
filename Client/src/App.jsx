@@ -25,6 +25,8 @@ import {
     DepositUnsuccess
 } from "./components/LogicComponent";
 import { fetchLoginStatus } from "./redux/authSlice";
+import Categories from "./pages/Categories/Categories";
+import CategoriesPage from "./pages/Categories";
 
 function App() {
     const dispatch = useDispatch();
@@ -58,6 +60,7 @@ function App() {
 
             <Route element={<LayOut />}>
                 <Route path="/" element={<Home />} />
+                <Route path="/categories" element={<CategoriesPage   />} />
             </Route>
 
             <Route path="login-success" element={<LoginSuccess />} />
