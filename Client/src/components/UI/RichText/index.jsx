@@ -2,10 +2,11 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
 import Highlight from "@tiptap/extension-highlight";
+import { forwardRef, useImperativeHandle } from "react";
 
 import MenuBar from "./MenuBar";
 
-function RichText({ content, onChange, classCustom }) {
+const RichText = forwardRef(function RichText({ content, onChange, classCustom }, ref) {
     const editor = useEditor({
         extensions: [
             StarterKit.configure({
@@ -29,7 +30,7 @@ function RichText({ content, onChange, classCustom }) {
                 }
             })
         ],
-        content: content,
+        content,
         editorProps: {
             attributes: {
                 class: classCustom
@@ -41,12 +42,23 @@ function RichText({ content, onChange, classCustom }) {
         }
     });
 
+    // Expose editor methods to parent
+    useImperativeHandle(
+        ref,
+        () => ({
+            clear: () => {
+                editor?.commands.clearContent();
+            }
+        }),
+        [editor]
+    );
+
     return (
         <>
             <MenuBar editor={editor} />
             <EditorContent editor={editor} />
         </>
     );
-}
+});
 
 export default RichText;

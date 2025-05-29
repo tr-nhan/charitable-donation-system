@@ -1,4 +1,3 @@
-const { query } = require("express");
 const pool = require("../configDB");
 
 const getInfoFilter = async (data) => {

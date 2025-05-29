@@ -30,4 +30,20 @@ router.post("/reaction/update", verifyLogIn, campaignController.updateCampaignRe
 // delete campaign reaction /api/campaign/reaction/delete [POST]
 router.post("/reaction/delete", verifyLogIn, campaignController.deleteCampaignReaction);
 
+// get updated info of a campaign /api/campaign/updates [POST]
+router.post("/updates", campaignController.getUpdatedInfoCampaign);
+
+// add campaign update /api/campaign/updates/insert/info [POST]
+router.post("/updates/insert/info", verifyLogIn, campaignController.insertCampaignUpdate);
+
+// add campaign update images /api/campaign/updates/insert/images [POST]
+router.post(
+    "/updates/insert/images",
+    verifyLogIn,
+    uploadCampaign.array("updateImages"),
+    campaignController.insertCampaignUpdateImages
+);
+
+router.get("/filter", campaignController.filterCampaignsWithPaginationController);
+
 module.exports = router;

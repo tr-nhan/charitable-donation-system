@@ -369,18 +369,20 @@ function CampaignInfo({ campaign }) {
 
             {/* List of Images */}
             {images.length > 0 && (
-                <div className="py-3 px-5 flex flex-row justify-start items-center gap-5 border-[#e0ddd6] shadow-sm">
-                    {images.map((img, i) => {
-                        return (
-                            <div key={i} className="w-[100px] h-[100px] rounded-lg overflow-hidden">
+                <div className="mt-6 py-3 px-5 overflow-x-auto max-w-[500px] md:max-w-[700px]">
+                    <div className="flex flex-row items-center gap-5 w-max">
+                        {images.map((img, i) => (
+                            <div
+                                key={i}
+                                className="w-[100px] h-[100px] rounded-lg overflow-hidden shrink-0">
                                 <img
-                                    src={img}
+                                    src={img.url}
                                     alt="Campaign_Img"
                                     className="w-full h-full object-cover"
                                 />
                             </div>
-                        );
-                    })}
+                        ))}
+                    </div>
                 </div>
             )}
 
@@ -405,7 +407,7 @@ function CampaignInfo({ campaign }) {
                 />
             </div>
 
-            {/* Update Info */}
+            {/* Updated Info */}
             {info.update_time > 0 && (
                 <div className="mt-6 bg-white rounded-xl py-5">
                     {/* Heading */}

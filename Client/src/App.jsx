@@ -13,7 +13,9 @@ import {
     BalanceManagement,
     Deposit,
     PageNotFound,
-    CampaignInfo
+    CampaignInfo,
+    ManageCampaign,
+    SearchCampaign
 } from "./pages";
 import { GuestRoute, PrivateRoute } from "./components/FilterRoutes";
 import {
@@ -48,6 +50,8 @@ function App() {
                     <Route path="/balance" element={<BalanceManagement />} />
                     <Route path="/deposit/:method" element={<Deposit />} />
                     <Route path="/campaign/discover/:campaignId" element={<CampaignInfo />} />
+                    <Route path="/campaign/manage/:campaignId" element={<ManageCampaign />} />
+                    <Route path="/campaign/search" element={<SearchCampaign />} />
                 </Route>
                 <Route path="/create-campaign" element={<CreateCampaign />} />
             </Route>

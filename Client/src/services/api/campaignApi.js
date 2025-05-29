@@ -90,6 +90,62 @@ const deleteCampaignReaction = async (data) => {
     }
 };
 
+const getUpdatedInfoCampaign = async (campaignId) => {
+    try {
+        const res = await axios.post(
+            `${SERVER_URL}/updates`,
+            { campaignId },
+            { withCredentials: true }
+        );
+
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        return { error: 400, message: "Client fault" };
+    }
+};
+
+const insertCampaignUpdateInfo = async (data) => {
+    try {
+        const res = await axios.post(`${SERVER_URL}/updates/insert/info`, data, {
+            withCredentials: true
+        });
+
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        return { error: 400, message: "Client fault" };
+    }
+};
+
+const insertCampaignUpdateImages = async (formData) => {
+    try {
+        const res = await axios.post(`${SERVER_URL}/updates/insert/images`, formData, {
+            withCredentials: true,
+            headers: { "Content-Type": "multipart/form-data" }
+        });
+
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        return { error: 400, message: "Client fault" };
+    }
+};
+
+const getCampaignsByFilter = async (filters) => {
+    try {
+        const queryString = new URLSearchParams(filters).toString();
+
+        const res = await axios.get(`${SERVER_URL}/filter?${queryString}`, {
+            withCredentials: true
+        });
+
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export {
     getCategoriesCampaign,
     createCampaign,
@@ -97,5 +153,9 @@ export {
     getFullInfoCampaignById,
     insertCampaignReaction,
     updateCampaignReaction,
-    deleteCampaignReaction
+    deleteCampaignReaction,
+    getUpdatedInfoCampaign,
+    insertCampaignUpdateInfo,
+    insertCampaignUpdateImages,
+    getCampaignsByFilter
 };

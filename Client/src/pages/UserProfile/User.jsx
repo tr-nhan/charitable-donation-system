@@ -37,6 +37,8 @@ function User() {
                 setLoading(true);
                 const res = await getUserInfo({ user_id: user.user_id });
                 if (res.error === 0) {
+                    console.log(res.results[0]);
+                    
                     setUserInfo(res.results[0]);
                 }
             } catch (error) {

@@ -8,7 +8,11 @@ const {
     getDonations,
     insertReaction,
     updateReaction,
-    deleteReaction
+    deleteReaction,
+    getUpdatedInfo,
+    insertUpdateInfo,
+    updateCampaignImages,
+    filterCampaignsWithPagination
 } = require("../models/query/campaignsQuery");
 
 const getCategories = async (req, res) => {
@@ -32,7 +36,7 @@ const createCampaign = async (req, res) => {
             description: req.body.description,
             goal_fiat: req.body.goal_fiat,
             goal_crypto: req.body.goal_crypto || 0,
-            start_date: req.body.start_date || null,
+            start_date: req.body.start_date || Date.now(),
             end_date: req.body.end_date || null,
             campaign_image: req.file?.path,
             category: req.body.category
@@ -99,8 +103,8 @@ const getFullInfoCampaign = async (req, res) => {
         }
 
         if (campaignImgs.length !== 0) {
-            var imgs = campaignImgs.image_url;
-            imgs = imgs.trim().split(",");
+            var imgs = campaignImgs[0].image_url;
+            imgs = imgs.split(",");
             results.campaignImages = imgs;
         } else results.campaignImages = [];
 
@@ -237,6 +241,105 @@ const deleteCampaignReaction = async (req, res) => {
     }
 };
 
+const getUpdatedInfoCampaign = async (req, res) => {
+    try {
+        const { campaignId } = req.body;
+
+        if (!campaignId) {
+            return res.status(400).json({ error: 1, message: "Missing campaign ID" });
+        }
+        const updates = await getUpdatedInfo(campaignId);
+
+        res.status(200).json({ error: 0, results: updates });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 1, message: "Server is broken" });
+    }
+};
+
+const insertCampaignUpdate = async (req, res) => {
+    try {
+        const { campaignId, title, content } = req.body;
+        const userId = req.user.user_id;
+
+        if (!campaignId || !title || !content) {
+            return res.status(400).json({ error: 1, message: "Missing some required fields" });
+        }
+
+        const updateData = {
+            campaignId,
+            authorId: userId,
+            title,
+            content
+        };
+
+        const newUpdate = await insertUpdateInfo(updateData);
+
+        if (newUpdate) {
+            return res.status(200).json({ error: 0, message: "Update added successfully" });
+        } else {
+            return res.status(500).json({ error: 1, message: "Failed to add update" });
+        }
+    } catch (error) {
+        console.error("Error inserting campaign update:", error);
+        return res.status(500).json({ error: 1, message: "Server is broken" });
+    }
+};
+
+const insertCampaignUpdateImages = async (req, res) => {
+    try {
+        const { campaignId } = req.body;
+        if (!campaignId) {
+            return res.status(400).json({ error: 1, message: "Missing campaign ID" });
+        }
+        const uploadedImages = req.files;
+
+        const image_urls = uploadedImages.map((file) => file.path).join(",");
+        const updatedCampaign = await updateCampaignImages(campaignId, image_urls);
+        if (updatedCampaign) {
+            return res.status(200).json({ error: 0, message: "Images added successfully" });
+        } else {
+            return res.status(500).json({ error: 1, message: "Failed to add images" });
+        }
+    } catch (error) {
+        console.error("Error inserting campaign update images:", error);
+        return res.status(500).json({ error: 1, message: "Server is broken" });
+    }
+};
+
+const filterCampaignsWithPaginationController = async (req, res) => {
+    try {
+        const {
+            q = "",
+            fromGoal = 0,
+            toGoal = Number.MAX_SAFE_INTEGER,
+            categoryId = null,
+            page = 0
+        } = req.query;
+
+        // Gọi hàm truy vấn
+        const result = await filterCampaignsWithPagination(
+            q,
+            parseInt(fromGoal),
+            parseInt(toGoal),
+            categoryId ? parseInt(categoryId) : null,
+            parseInt(page)
+        );
+
+        res.status(200).json({
+            error: 0,
+            message: "Filter campaigns successfully",
+            results: result
+        });
+    } catch (error) {
+        console.error("Error in filterCampaignsWithPaginationController:", error);
+        res.status(500).json({
+            success: false,
+            message: "Server error while filtering campaigns"
+        });
+    }
+};
+
 module.exports = {
     getCategories,
     createCampaign,
@@ -244,5 +347,9 @@ module.exports = {
     getFullInfoCampaign,
     insertCampaignReaction,
     updateCampaignReaction,
-    deleteCampaignReaction
+    deleteCampaignReaction,
+    getUpdatedInfoCampaign,
+    insertCampaignUpdate,
+    insertCampaignUpdateImages,
+    filterCampaignsWithPaginationController
 };
