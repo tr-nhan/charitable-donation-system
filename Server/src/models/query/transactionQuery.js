@@ -1,9 +1,7 @@
 const pool = require("../configDB");
 
 const insertTransaction = async (data) => {
-    try {
-        console.log(data);
-        
+    try {        
         const query = `
         INSERT INTO user_transactions
         (user_id, transaction_type, method, provider_name, amount, currency, status)

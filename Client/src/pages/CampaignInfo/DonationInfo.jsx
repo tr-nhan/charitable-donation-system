@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Dialog, Avatar, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const formatCurrencyVND = (amount) => {
     const parsed = parseFloat(amount);
@@ -16,6 +17,7 @@ const formatCurrencyVND = (amount) => {
 import bgShareProfile from "../../assets/images/bgShareProfile.jpg";
 
 function DonationInfo({ campaign }) {
+    const userId = useSelector((state) => state.auth.user.user_id);
     const navigate = useNavigate();
     // innit
     const info = campaign.campaignInfo;
@@ -59,7 +61,10 @@ function DonationInfo({ campaign }) {
                     className="bg-lime-300 text-gray-900 py-2 rounded-lg font-semibold hover:bg-lime-400 transition cursor-pointer">
                     Share
                 </button>
-                <button className="bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition cursor-pointer">
+                <button
+                    disabled={userId === info.creator_id}
+                    onClick={() => navigate(`/donation/${info.campaign_id}`)}
+                    className="bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition cursor-pointer">
                     Donate now
                 </button>
             </div>

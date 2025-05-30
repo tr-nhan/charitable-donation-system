@@ -63,7 +63,10 @@ const captureOrderPaypal = async (req, res) => {
 
         await increaseUserBalance(userId, { fiat_balance: fiatAmount, crypto_balance: 0 });
 
-        res.json(capture.result);
+        res.json({
+            error: 0,
+            results: capture.result
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 1, messagse: "Server is broken" });

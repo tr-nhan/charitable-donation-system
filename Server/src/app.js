@@ -50,6 +50,10 @@ app.use("/api/transaction", transactionRouter);
 const userBalanceRouter = require("./routes/userBalance.route");
 app.use("/api/balance", userBalanceRouter);
 
+// Donations Router
+const donationRouter = require("./routes/donation.route");
+app.use("/api/donation", donationRouter);
+
 server.listen(process.env.PORT, () => {
     console.log(`Server is running at PORT ${process.env.PORT}`);
 });

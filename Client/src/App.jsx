@@ -15,7 +15,8 @@ import {
     PageNotFound,
     CampaignInfo,
     ManageCampaign,
-    SearchCampaign
+    SearchCampaign,
+    DonationCampaign
 } from "./pages";
 import { GuestRoute, PrivateRoute } from "./components/FilterRoutes";
 import {
@@ -54,13 +55,14 @@ function App() {
                     <Route path="/campaign/discover/:campaignId" element={<CampaignInfo />} />
                     <Route path="/campaign/manage/:campaignId" element={<ManageCampaign />} />
                     <Route path="/campaign/search" element={<SearchCampaign />} />
+                    <Route path="/donation/:campaignId" element={<DonationCampaign />} />
                 </Route>
                 <Route path="/create-campaign" element={<CreateCampaign />} />
             </Route>
 
             <Route element={<LayOut />}>
                 <Route path="/" element={<Home />} />
-                <Route path="/categories" element={<CategoriesPage   />} />
+                <Route path="/categories" element={<CategoriesPage />} />
             </Route>
 
             <Route path="login-success" element={<LoginSuccess />} />

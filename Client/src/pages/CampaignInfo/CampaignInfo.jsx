@@ -55,6 +55,7 @@ const formatCurrencyVND = (amount) => {
 };
 
 function CampaignInfo({ campaign }) {
+    
     const userId = useSelector((state) => state.auth.user.user_id);
     const navigate = useNavigate();
     const refReactionButton = useRef(null);
@@ -397,7 +398,10 @@ function CampaignInfo({ campaign }) {
                     className="col-span-2 w-full py-3 bg-green-100 text-green-800 font-medium rounded-2xl hover:bg-green-200 transition-colors duration-200 cursor-pointer">
                     Share
                 </button>
-                <button className="col-span-4 w-full py-3 bg-green-800 text-white font-semibold rounded-2xl hover:bg-green-900 transition-colors duration-200 shadow-md cursor-pointer">
+                <button
+                    disabled={userId === info.creator_id}
+                    onClick={() => navigate(`/donation/${info.campaign_id}`)}
+                    className="col-span-4 w-full py-3 bg-green-800 text-white font-semibold rounded-2xl hover:bg-green-900 transition-colors duration-200 shadow-md cursor-pointer">
                     Donation
                 </button>
                 {/* Share campaign */}

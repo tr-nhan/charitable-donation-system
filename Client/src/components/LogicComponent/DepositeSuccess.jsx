@@ -19,6 +19,7 @@ function DepositSuccess() {
             const fetchCapturePaypal = async () => {
                 try {
                     const res = await capturePaypal(orderId, fiatAmount);
+                    
                     if (res.error === 0) navigate("/balance");
                 } catch (error) {
                     console.log(error);

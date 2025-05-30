@@ -8,9 +8,9 @@ const getBalance = async (req, res) => {
             return;
         }
 
-        const response = await getUserBalance({ user_id: userId }) || [];
+        const response = await getUserBalance({ user_id: userId }) || [];        
         
-        const balance = response.length > 0 ? response[0] : { fiat_balance: 0, crypto_balance: 0 };
+        const balance = response !== null || !response ? response : { fiat_balance: 0, crypto_balance: 0 };
 
         res.json({ error: 0, results: balance });
     } catch (error) {
