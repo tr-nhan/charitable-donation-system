@@ -10,7 +10,7 @@ const getInfoFilter = async (data) => {
         }
 
         const conditions = keys.map((key, index) => `${key} = $${index + 1}`);
-        const query = `SELECT email, full_name, provider, profile_image, bio, phone, is_verified, private, user_id FROM users WHERE ${conditions.join(" AND ")}`;
+        const query = `SELECT email, full_name, provider, profile_image, bio, is_verified, private, user_id FROM users WHERE ${conditions.join(" AND ")}`;
         
         const userInfo = await pool.query(query, values);
 
@@ -40,7 +40,7 @@ const insertUser = async (data) => {
 
         const placeholders = values.map((_, index) => `$${index + 1}`).join(", ");
 
-        const query = `INSERT INTO users (${fields.join(", ")}) VALUES (${placeholders}) RETURNING email, full_name, provider, profile_image, bio, phone, is_verified, private, user_id`;
+        const query = `INSERT INTO users (${fields.join(", ")}) VALUES (${placeholders}) RETURNING email, full_name, provider, profile_image, bio, is_verified, private, user_id`;
 
         const result = await pool.query(query, values);
 
@@ -79,6 +79,10 @@ const updateUserInfo = async (dataChange, user_id) => {
         throw error;
     }
 };
+
+const checkAdmin = async (userId) => {
+    
+}
 
 module.exports = {
     getInfoFilter,

@@ -146,6 +146,20 @@ const getCampaignsByFilter = async (filters) => {
     }
 };
 
+const getCampaignBalance = async (campaignId) => {
+    try {
+        const res = await axios.post(
+            `${SERVER_URL}/balance`,
+            { campaignId },
+            { withCredentials: true }
+        );
+
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export {
     getCategoriesCampaign,
     createCampaign,
@@ -157,5 +171,6 @@ export {
     getUpdatedInfoCampaign,
     insertCampaignUpdateInfo,
     insertCampaignUpdateImages,
-    getCampaignsByFilter
+    getCampaignsByFilter,
+    getCampaignBalance
 };

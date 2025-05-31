@@ -16,9 +16,10 @@ import {
     CampaignInfo,
     ManageCampaign,
     SearchCampaign,
-    DonationCampaign
+    DonationCampaign,
+    AdminDashboard
 } from "./pages";
-import { GuestRoute, PrivateRoute } from "./components/FilterRoutes";
+import { GuestRoute, PrivateRoute, AdminRoute } from "./components/FilterRoutes";
 import {
     LoginSuccess,
     VerifyComponent,
@@ -40,13 +41,18 @@ function App() {
         <Routes>
             <Route path="/verify/sign-up" element={<VerifyComponent />} />
 
+            {/* Admin route */}
+            <Route element={<AdminRoute />}>
+                <Route path="/admin" element={<AdminDashboard />} />
+            </Route>
+
             {/* Guess route */}
             <Route element={<GuestRoute />}>
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route path="/sign-up" element={<SignUp />} />
             </Route>
 
-            {/* Private route */}
+            {/* Private user route */}
             <Route element={<PrivateRoute />}>
                 <Route element={<LayOut />}>
                     <Route path="/profile" element={<UserProfile />} />

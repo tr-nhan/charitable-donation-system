@@ -1,6 +1,7 @@
 const { Server } = require("socket.io");
 
 const { verifySignUp } = require("../utils/sockets/verifySignUp");
+const { handleWithdrawSocket } = require("../utils/sockets/withdrawSocket")
 
 let io;
 
@@ -15,6 +16,7 @@ const setupSocket = (server) => {
     });
 
     verifySignUp(io);
+    handleWithdrawSocket(io);
 
     return io;
 };

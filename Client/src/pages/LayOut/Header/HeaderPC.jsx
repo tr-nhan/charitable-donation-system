@@ -114,16 +114,8 @@ const USER = [
     },
     {
         title: "My Fundraisers",
-        path: "/my-fundraisers"
+        path: "/profile"
     },
-    {
-        title: "My Impact",
-        path: "/my-impact"
-    },
-    {
-        title: "Settings",
-        paht: "/settings"
-    }
 ];
 
 function HeaderPC() {

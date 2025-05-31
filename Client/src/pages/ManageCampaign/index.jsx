@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { ManageCampaignDashboard, ManageCampaignUpdate, ManageCampaignUpdateImages } from "./components";
+import {
+    ManageCampaignDashboard,
+    ManageCampaignUpdate,
+    ManageCampaignUpdateImages,
+    WithdrawRequest
+} from "./components";
 
 const OPTIONS = [
     {
@@ -19,7 +24,11 @@ const OPTIONS = [
         value: "update-images",
         component: ({ campaignId }) => <ManageCampaignUpdateImages campaignId={campaignId} />
     },
-    
+    {
+        label: "Withdraw request",
+        value: "withdraw-request",
+        component: ({ campaignId }) => <WithdrawRequest campaignId={campaignId} />
+    }
 ];
 
 function ManageCampaign() {

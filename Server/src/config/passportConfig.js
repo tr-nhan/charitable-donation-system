@@ -54,14 +54,13 @@ passport.use(
                 const user = await getInfoFilter({ email, provider: "google" });
 
                 // If user is existed
-                if (user.length === 1) {             
-                    
+                if (user.length === 1) {
                     const passwordHash = await getPassword(user[0].user_id);
-                    
-                    const oldPass = passwordHash.password_hash                    
-                    
+
+                    const oldPass = passwordHash.password_hash;
+
                     const isMatch = await bcrypt.compare(id, oldPass);
-                    
+
                     if (isMatch)
                         return done(null, { user_id: user[0].user_id, email: user[0].email });
                     return done(null, false);

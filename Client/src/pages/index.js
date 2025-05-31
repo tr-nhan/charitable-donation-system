@@ -12,3 +12,4 @@ export { default as CampaignInfo } from "./CampaignInfo";
 export { default as ManageCampaign } from "./ManageCampaign";
 export { default as SearchCampaign } from "./SearchCampaign";
 export { default as DonationCampaign } from "./DonationCampaign";
+export { default as AdminDashboard } from "./AdminDashboard";

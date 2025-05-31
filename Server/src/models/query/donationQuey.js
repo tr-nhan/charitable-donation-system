@@ -63,6 +63,32 @@ const insertDonationQuery = async (d) => {
         }
         await client.query(queryC, campaign);
 
+        // update campaign balance
+        const existCB = await client.query(
+            "SELECT * FROM campaign_balances WHERE campaign_id = $1",
+            [d.campaignId]
+        );
+        var queryCB = "";
+        const fiatTmp = d.fiatAmount || 0;
+        const cryptoTmp = d.cryptoAmount || 0;
+        if (existCB.rows.length === 1) {
+            queryCB = `
+            UPDATE campaign_balances
+            SET
+            fiat_amount = fiat_amount + $1,
+            crypto_amount = crypto_amount + $2
+            WHERE campaign_id = $3
+            `;
+            await client.query(queryCB, [fiatTmp, cryptoTmp, d.campaignId]);
+        } else {
+            queryCB = `
+            INSERT INTO campaign_balances
+            (campaign_id, fiat_amount, crypto_amount)
+            VALUES ($1, $2, $3)
+            `;
+            await client.query(queryCB, [d.campaignId, fiatTmp, cryptoTmp]);
+        }
+
         await client.query("COMMIT");
 
         return { error: 0 };

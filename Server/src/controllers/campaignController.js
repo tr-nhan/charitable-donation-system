@@ -12,7 +12,8 @@ const {
     getUpdatedInfo,
     insertUpdateInfo,
     updateCampaignImages,
-    filterCampaignsWithPagination
+    filterCampaignsWithPagination,
+    getCampaignBalanceQuery
 } = require("../models/query/campaignsQuery");
 
 const getCategories = async (req, res) => {
@@ -340,6 +341,22 @@ const filterCampaignsWithPaginationController = async (req, res) => {
     }
 };
 
+const getCampaignBalance = async (req, res) => {
+    try {
+        const { campaignId } = req.body;
+
+        if (!campaignId)
+            return res.status(400).json({ error: 1, message: "Missing some required fields" });
+
+        const results = await getCampaignBalanceQuery(campaignId);
+
+        return res.json({ error: 0, results: results.rows[0] });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 1, message: "Server is broken" });
+    }
+};
+
 module.exports = {
     getCategories,
     createCampaign,
@@ -351,5 +368,6 @@ module.exports = {
     getUpdatedInfoCampaign,
     insertCampaignUpdate,
     insertCampaignUpdateImages,
-    filterCampaignsWithPaginationController
+    filterCampaignsWithPaginationController,
+    getCampaignBalance
 };

@@ -44,6 +44,10 @@ router.post(
     campaignController.insertCampaignUpdateImages
 );
 
+// filter campaign with pagination
 router.get("/filter", campaignController.filterCampaignsWithPaginationController);
+
+// get campaign balance
+router.post("/balance", campaignController.getCampaignBalance);
 
 module.exports = router;

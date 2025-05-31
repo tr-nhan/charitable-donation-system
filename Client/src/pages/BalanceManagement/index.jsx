@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button, Avatar } from "@mui/material";
 
+import { Loading } from "../../components/UI";
 import MomoLogo from "../../assets/images/momo_icon_square_pinkbg_RGB.png";
 import USDTLogo from "../../assets/images/tether-usdt-logo.png";
 import PaymeLogo from "../../assets/images/Logo-PayME-V.webp";
@@ -20,12 +21,12 @@ function BalanceManagement() {
 
     useEffect(() => {
         const fetchUserBalance = async () => {
-            const res = await getUserBalance(userId);
+            const res = await getUserBalance(userId);            
 
             setBalances(() => {
                 return {
-                    fiatBalance: res.results.fiat_balance,
-                    cryptoBalance: res.results.crypto_balance
+                    fiatBalance: res.results?.fiat_balance || 0,
+                    cryptoBalance: res.results?.crypto_balance || 0
                 };
             });
         };
@@ -51,7 +52,9 @@ function BalanceManagement() {
                 </div>
                 <div className="p-5 flex flex-col border border-[#e0ddd6] rounded-xl bg-white shadow-sm">
                     <span className="text-sm text-[#7a7a7a]">Crypto Balance</span>
-                    <span className="mt-2 text-2xl font-semibold text-[#252525]">{balances.cryptoBalance} USDT</span>
+                    <span className="mt-2 text-2xl font-semibold text-[#252525]">
+                        {balances.cryptoBalance} USDT
+                    </span>
                 </div>
             </div>
 

@@ -113,9 +113,6 @@ function ManageCampaignDashboard({ campaignId }) {
         return <Loading />;
     }
 
-    console.log(images);
-    
-
     return (
         <div className="w-full">
             {/* Title */}

@@ -380,6 +380,74 @@ const filterCampaignsWithPagination = async (q, fromGoal, toGoal, categoryId, pa
     }
 };
 
+const getCampaignBalanceQuery = async (campaignId) => {
+    try {
+        const query = `
+        SELECT cb.campaign_id, cb.fiat_amount, cb.crypto_amount, c.goal_fiat
+        FROM campaign_balances cb
+        INNER JOIN campaigns c ON c.campaign_id = cb.campaign_id
+        WHERE cb.campaign_id = $1
+        `;
+
+        const result = await pool.query(query, [campaignId]);
+
+        return result;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const updateCampaignBalanceQuery = async (campaignId, status, amount) => {
+    const client = await pool.connect();
+
+    try {
+        await client.query("BEGIN");
+
+        // Check if campaign balance exists
+        const checkQuery = `SELECT fiat_amount FROM campaign_balances WHERE campaign_id = $1`;
+        const checkResult = await client.query(checkQuery, [campaignId]);
+
+        if (checkResult.rowCount === 0) {
+            // If not exist, insert new record
+            const initialAmount = status === "inc" ? amount : -amount;
+
+            if (initialAmount < 0) {
+                throw new Error("Cannot insert with negative fiat_amount.");
+            }
+
+            const insertQuery = `
+                INSERT INTO campaign_balances (campaign_id, fiat_amount)
+                VALUES ($1, $2)
+            `;
+            await client.query(insertQuery, [campaignId, initialAmount]);
+        } else {
+            // If exists, update it
+            const currentAmount = parseFloat(checkResult.rows[0].fiat_amount);
+            const newAmount = status === "inc" ? currentAmount + amount : currentAmount - amount;
+
+            if (newAmount < 0) {
+                throw new Error("Fiat amount cannot be negative.");
+            }
+
+            const updateQuery = `
+                UPDATE campaign_balances
+                SET fiat_amount = $1
+                WHERE campaign_id = $2
+            `;
+            await client.query(updateQuery, [newAmount, campaignId]);
+        }
+
+        await client.query("COMMIT");
+        return { success: true };
+    } catch (error) {
+        await client.query("ROLLBACK");
+        console.error("updateCampaignBalanceQuery error:", error);
+        return { success: false, error: error.message };
+    } finally {
+        client.release();
+    }
+};
+
 module.exports = {
     getCategoriesCampaigns,
     insertCampaign,
@@ -393,5 +461,7 @@ module.exports = {
     getUpdatedInfo,
     insertUpdateInfo,
     updateCampaignImages,
-    filterCampaignsWithPagination
+    filterCampaignsWithPagination,
+    getCampaignBalanceQuery,
+    updateCampaignBalanceQuery
 };
