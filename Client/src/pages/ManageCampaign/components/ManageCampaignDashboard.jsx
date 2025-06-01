@@ -47,7 +47,7 @@ const REACTIONS_TYPE = [
     }
 ];
 
-function ManageCampaignDashboard({ campaignId }) {
+function ManageCampaignDashboard({ campaignId, isSuspend }) {
     const userId = useSelector((state) => state.auth.user.user_id);
     const navigate = useNavigate();
     // innitial state for campaign data
@@ -115,6 +115,22 @@ function ManageCampaignDashboard({ campaignId }) {
 
     return (
         <div className="w-full">
+            {isSuspend && (
+                <p
+                    style={{
+                        color: "red",
+                        backgroundColor: "#ffe5e5",
+                        padding: "10px",
+                        border: "1px solid red",
+                        borderRadius: "5px",
+                        marginBottom: "10px"
+                    }}>
+                    ⚠️ Your campaign has been suspended due to potential violations such as breaking
+                    our policies, receiving multiple reports, or other suspicious activities. Please
+                    contact our support team for more information.
+                </p>
+            )}
+
             {/* Title */}
             <h1 className="mb-4 text-3xl font-semibold">{info?.title}</h1>
 

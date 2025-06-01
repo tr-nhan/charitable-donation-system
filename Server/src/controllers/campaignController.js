@@ -13,7 +13,9 @@ const {
     insertUpdateInfo,
     updateCampaignImages,
     filterCampaignsWithPagination,
-    getCampaignBalanceQuery
+    getCampaignBalanceQuery,
+    getReportByCampaignId,
+    insertReportCampaignQuery
 } = require("../models/query/campaignsQuery");
 
 const getCategories = async (req, res) => {
@@ -82,6 +84,7 @@ const getFullInfoCampaign = async (req, res) => {
         var campaignImgs = await getCampaignImgs(campaignId);
         var campaignReactions = await getCampaignReactions({ campaign_id: campaignId });
         var campaignDonations = await getDonations({ campaign_id: campaignId });
+        var campaignReports = await getReportByCampaignId(campaignId);
 
         if (campaignInfo.length === 1) {
             const campaign = campaignInfo[0];
@@ -165,6 +168,11 @@ const getFullInfoCampaign = async (req, res) => {
                 data: campaignDonations.donations
             };
         }
+
+        results.campaignReports = {
+            count: campaignReports.length,
+            data: campaignReports
+        };
 
         return res.json({ error: 0, results });
     } catch (error) {
@@ -357,6 +365,26 @@ const getCampaignBalance = async (req, res) => {
     }
 };
 
+const insertReport = async (req, res) => {
+    try {
+        const { campaignId, reportText, reporterId } = req.body;
+
+        const uploadedImages = req.files;
+        const reportImages = uploadedImages.map((file) => file.path).join(",");
+
+        if (!campaignId || !reportText || !reportImages || !reporterId)
+            return res.json({ error: 1, message: "Missing some required fields" });
+        
+
+        await insertReportCampaignQuery({ campaignId, reportText, reportImages, reporterId });
+
+        res.json({ error: 0, message: "Success" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 0, message: "Server is broken" });
+    }
+};
+
 module.exports = {
     getCategories,
     createCampaign,
@@ -369,5 +397,6 @@ module.exports = {
     insertCampaignUpdate,
     insertCampaignUpdateImages,
     filterCampaignsWithPaginationController,
-    getCampaignBalance
+    getCampaignBalance,
+    insertReport
 };

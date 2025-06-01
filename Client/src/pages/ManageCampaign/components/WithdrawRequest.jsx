@@ -19,7 +19,7 @@ const formatCurrencyVND = (amount) => {
 
 const socket = io("http://localhost:8080");
 
-function WithdrawRequest({ campaignId }) {
+function WithdrawRequest({ campaignId, isSuspend }) {
     const userId = useSelector((state) => state.auth.user.user_id);
     const [withdrawRequests, setWithdrawRequests] = useState(null);
     const [campaignBalance, setCampaignBalance] = useState(null);
@@ -93,6 +93,7 @@ function WithdrawRequest({ campaignId }) {
     };
 
     const handleSubmit = () => {
+        if (isSuspend) return;
         if (validate()) {
             socket.emit(
                 "withdraw-request",
@@ -118,6 +119,21 @@ function WithdrawRequest({ campaignId }) {
 
     return (
         <div className="space-y-8 p-4">
+            {isSuspend && (
+                <p
+                    style={{
+                        color: "red",
+                        backgroundColor: "#ffe5e5",
+                        padding: "10px",
+                        border: "1px solid red",
+                        borderRadius: "5px",
+                        marginBottom: "10px"
+                    }}>
+                    ⚠️ Your campaign has been suspended due to potential violations such as breaking
+                    our policies, receiving multiple reports, or other suspicious activities. Please
+                    contact our support team for more information.
+                </p>
+            )}
             {/* Withdraw Request Form */}
             <div className="bg-white shadow-md p-6 rounded-lg">
                 <h2 className="text-2xl font-semibold mb-4">Request a Withdrawal</h2>
@@ -142,6 +158,7 @@ function WithdrawRequest({ campaignId }) {
                             type="number"
                             value={amount}
                             onChange={(e) => {
+                                if (isSuspend) return;
                                 setAmount(e.target.value);
                                 setErrorMessage("");
                             }}
@@ -159,6 +176,7 @@ function WithdrawRequest({ campaignId }) {
                             type="email"
                             value={withdrawInfo}
                             onChange={(e) => {
+                                if (isSuspend) return;
                                 setWithdrawInfo(e.target.value);
                                 setErrorMessage("");
                             }}

@@ -62,8 +62,11 @@ function DonationInfo({ campaign }) {
                     Share
                 </button>
                 <button
-                    disabled={userId === info.creator_id}
-                    onClick={() => navigate(`/donation/${info.campaign_id}`)}
+                    disabled={userId === info.creator_id || info.isSuspend}
+                    onClick={() => {
+                        if (info.isSuspend) return;
+                        navigate(`/donation/${info.campaign_id}`);
+                    }}
                     className="bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition cursor-pointer">
                     Donate now
                 </button>

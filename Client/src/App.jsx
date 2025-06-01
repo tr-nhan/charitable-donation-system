@@ -17,7 +17,8 @@ import {
     ManageCampaign,
     SearchCampaign,
     DonationCampaign,
-    AdminDashboard
+    AdminDashboard,
+    ReportCampaign
 } from "./pages";
 import { GuestRoute, PrivateRoute, AdminRoute } from "./components/FilterRoutes";
 import {
@@ -62,6 +63,7 @@ function App() {
                     <Route path="/campaign/manage/:campaignId" element={<ManageCampaign />} />
                     <Route path="/campaign/search" element={<SearchCampaign />} />
                     <Route path="/donation/:campaignId" element={<DonationCampaign />} />
+                    <Route path="/campaign/report/:campaignId" element={<ReportCampaign />} />
                 </Route>
                 <Route path="/create-campaign" element={<CreateCampaign />} />
             </Route>

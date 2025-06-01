@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import {
@@ -8,32 +8,54 @@ import {
     WithdrawRequest
 } from "./components";
 
+import { getFullInfoCampaignById } from "../../services/api/campaignApi";
+
 const OPTIONS = [
     {
         label: "Dashboard",
         value: "dashboard",
-        component: ({ campaignId }) => <ManageCampaignDashboard campaignId={campaignId} />
+        component: ({ campaignId, isSuspend }) => (
+            <ManageCampaignDashboard campaignId={campaignId} isSuspend={isSuspend} />
+        )
     },
     {
         label: "Update Campaign",
         value: "update-campaign",
-        component: ({ campaignId }) => <ManageCampaignUpdate campaignId={campaignId} />
+        component: ({ campaignId, isSuspend }) => (
+            <ManageCampaignUpdate campaignId={campaignId} isSuspend={isSuspend} />
+        )
     },
     {
         label: "Update Images",
         value: "update-images",
-        component: ({ campaignId }) => <ManageCampaignUpdateImages campaignId={campaignId} />
+        component: ({ campaignId, isSuspend }) => (
+            <ManageCampaignUpdateImages campaignId={campaignId} isSuspend={isSuspend} />
+        )
     },
     {
         label: "Withdraw request",
         value: "withdraw-request",
-        component: ({ campaignId }) => <WithdrawRequest campaignId={campaignId} />
+        component: ({ campaignId, isSuspend }) => (
+            <WithdrawRequest campaignId={campaignId} isSuspend={isSuspend} />
+        )
     }
 ];
 
 function ManageCampaign() {
     const { campaignId } = useParams();
     const [active, setActive] = useState("dashboard");
+    const [isSuspend, setIsSuspend] = useState(false);
+
+    useEffect(() => {
+        const fetchInitState = async () => {
+            const res = await getFullInfoCampaignById(campaignId);
+
+            setIsSuspend(res.results.campaignInfo.isSuspend);
+        };
+
+        fetchInitState();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const current = OPTIONS.find((item) => item.value === active);
 
@@ -57,7 +79,7 @@ function ManageCampaign() {
             <div className="ml-5 mr-10 hidden md:block w-px self-stretch bg-[#e0ddd6]" />
 
             {/* Element display */}
-            <div className="flex-1 w-full">{current?.component({ campaignId })}</div>
+            <div className="flex-1 w-full">{current?.component({ campaignId, isSuspend })}</div>
         </div>
     );
 }

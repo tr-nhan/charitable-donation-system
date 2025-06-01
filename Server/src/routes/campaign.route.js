@@ -31,7 +31,7 @@ router.post("/reaction/update", verifyLogIn, campaignController.updateCampaignRe
 router.post("/reaction/delete", verifyLogIn, campaignController.deleteCampaignReaction);
 
 // get updated info of a campaign /api/campaign/updates [POST]
-router.post("/updates", campaignController.getUpdatedInfoCampaign);
+router.post("/updates", verifyLogIn, campaignController.getUpdatedInfoCampaign);
 
 // add campaign update /api/campaign/updates/insert/info [POST]
 router.post("/updates/insert/info", verifyLogIn, campaignController.insertCampaignUpdate);
@@ -49,5 +49,13 @@ router.get("/filter", campaignController.filterCampaignsWithPaginationController
 
 // get campaign balance
 router.post("/balance", campaignController.getCampaignBalance);
+
+// insert campaign report /api/campaign/report/insert [POST]
+router.post(
+    "/report/insert",
+    verifyLogIn,
+    uploadCampaign.array("reportImages"),
+    campaignController.insertReport
+);
 
 module.exports = router;

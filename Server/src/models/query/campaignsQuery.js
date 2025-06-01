@@ -1,3 +1,4 @@
+const e = require("express");
 const pool = require("../configDB");
 
 const getCategoriesCampaigns = async () => {
@@ -383,7 +384,7 @@ const filterCampaignsWithPagination = async (q, fromGoal, toGoal, categoryId, pa
 const getCampaignBalanceQuery = async (campaignId) => {
     try {
         const query = `
-        SELECT cb.campaign_id, cb.fiat_amount, cb.crypto_amount, c.goal_fiat
+        SELECT cb.campaign_id, cb.fiat_amount, cb.crypto_amount, c.goal_fiat, c."isSuspend"
         FROM campaign_balances cb
         INNER JOIN campaigns c ON c.campaign_id = cb.campaign_id
         WHERE cb.campaign_id = $1
@@ -448,6 +449,39 @@ const updateCampaignBalanceQuery = async (campaignId, status, amount) => {
     }
 };
 
+const insertReportCampaignQuery = async (r) => {
+    try {        
+        const query = `
+        INSERT INTO campaign_reports
+        (campaign_id, report_text, report_images, reporter_id)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *
+        `;
+
+        const res = await pool.query(query, [r.campaignId, r.reportText, r.reportImages, r.reporterId]);
+
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const getReportByCampaignId = async (campaignId) => {
+    try {
+        const query = `
+            SELECT * FROM campaign_reports
+            WHERE campaign_id = $1
+            ORDER BY created_at DESC
+        `;
+
+        const res = await pool.query(query, [campaignId]);
+        return res.rows;
+    } catch (error) {
+        console.error("Error fetching campaign reports:", error);
+        throw error;
+    }
+};
+
 module.exports = {
     getCategoriesCampaigns,
     insertCampaign,
@@ -463,5 +497,7 @@ module.exports = {
     updateCampaignImages,
     filterCampaignsWithPagination,
     getCampaignBalanceQuery,
-    updateCampaignBalanceQuery
+    updateCampaignBalanceQuery,
+    insertReportCampaignQuery,
+    getReportByCampaignId
 };

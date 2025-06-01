@@ -160,6 +160,18 @@ const getCampaignBalance = async (campaignId) => {
     }
 };
 
+const insertCampaignReports = async (formData) => {
+    try {
+        const res = await axios.post(`${SERVER_URL}/report/insert`, formData, {
+            withCredentials: true
+        });
+
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export {
     getCategoriesCampaign,
     createCampaign,
@@ -172,5 +184,6 @@ export {
     insertCampaignUpdateInfo,
     insertCampaignUpdateImages,
     getCampaignsByFilter,
-    getCampaignBalance
+    getCampaignBalance,
+    insertCampaignReports
 };

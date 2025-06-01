@@ -55,7 +55,6 @@ const formatCurrencyVND = (amount) => {
 };
 
 function CampaignInfo({ campaign }) {
-    
     const userId = useSelector((state) => state.auth.user.user_id);
     const navigate = useNavigate();
     const refReactionButton = useRef(null);
@@ -114,6 +113,7 @@ function CampaignInfo({ campaign }) {
     }, []);
 
     const handleChangeReaction = async (type) => {
+        if (info.isSuspend) return;
         if (reactionChoice === type) {
             setReactionChoice(null);
             const res = await deleteCampaignReaction({ campaignId: info.campaign_id });
@@ -171,6 +171,23 @@ function CampaignInfo({ campaign }) {
 
     return (
         <div className="w-full col-span-3 md:col-span-2">
+            {info.isSuspend && (
+                <p
+                    style={{
+                        color: "red",
+                        backgroundColor: "#ffe5e5",
+                        padding: "10px",
+                        border: "1px solid red",
+                        borderRadius: "5px",
+                        marginBottom: "15px"
+                    }}>
+                    ⚠️ This campaign has been suspended due to suspicious activity, including
+                    potential scam behavior, multiple user reports, or violations of our platform
+                    policies. Please proceed with caution and contact our support team if you need
+                    further clarification.
+                </p>
+            )}
+
             {/* Title */}
             <h1 className="mb-4 text-3xl font-semibold">{info.title}</h1>
 
@@ -399,8 +416,11 @@ function CampaignInfo({ campaign }) {
                     Share
                 </button>
                 <button
-                    disabled={userId === info.creator_id}
-                    onClick={() => navigate(`/donation/${info.campaign_id}`)}
+                    disabled={userId === info.creator_id || info.isSuspend}
+                    onClick={() => {
+                        if (info.isSuspend) return;
+                        navigate(`/donation/${info.campaign_id}`);
+                    }}
                     className="col-span-4 w-full py-3 bg-green-800 text-white font-semibold rounded-2xl hover:bg-green-900 transition-colors duration-200 shadow-md cursor-pointer">
                     Donation
                 </button>
@@ -478,7 +498,7 @@ function CampaignInfo({ campaign }) {
                         Is there something wrong?
                     </span>
                     <button
-                        onClick={() => navigate(`/report/campaign/${info.campaign_id}`)}
+                        onClick={() => navigate(`/campaign/report/${info.campaign_id}`)}
                         className="text-sm text-red-600 hover:text-red-800 font-semibold underline transition duration-150 ease-in-out cursor-pointer">
                         Report this campaign
                     </button>

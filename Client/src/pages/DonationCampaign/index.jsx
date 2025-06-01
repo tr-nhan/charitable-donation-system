@@ -197,6 +197,7 @@ function DonationCampaign() {
     };
 
     const handleDonation = () => {
+        if (campaign.campaignInfo.isSuspend) return;
         const donationOptionCurrency = optionCurrency;
         const donationAmount = parseInt(amount);
 
@@ -213,7 +214,7 @@ function DonationCampaign() {
                     fiatAmount: donationOptionCurrency === "fiat" ? donationAmount : null,
                     cryptoAmount: donationOptionCurrency === "crypto" ? donationAmount : null
                 });
-                
+
                 if (res.error === 0) {
                     navigate(`/campaign/discover/${campaignId}`);
                 }
@@ -228,9 +229,26 @@ function DonationCampaign() {
     };
 
     if (!campaign || !userBalance) return <Loading />;
+    if (campaign.campaignInfo.isSuspend) return navigate(`/campaign/discover/${campaignId}`) 
     return (
         <div className="p-0 md:py-10 w-full h-full bg-[#f4f2ec] flex justify-center items-center">
             <div className="md:p-10 px-5 py-10 bg-white md:rounded-3xl md:w-[45%] w-full">
+                {campaign.campaignInfo.isSuspend && (
+                    <p
+                        style={{
+                            color: "red",
+                            backgroundColor: "#ffe5e5",
+                            padding: "10px",
+                            border: "1px solid red",
+                            borderRadius: "5px",
+                            marginBottom: "15px"
+                        }}>
+                        ⚠️ This campaign has been suspended due to suspicious activity, including
+                        potential scam behavior, multiple user reports, or violations of our
+                        platform policies. Please proceed with caution and contact our support team
+                        if you need further clarification.
+                    </p>
+                )}
                 {/* Campaign info */}
                 <div className="flex flex-row">
                     <img
@@ -380,8 +398,8 @@ function DonationCampaign() {
                                 checked={isAnonymous}
                                 onChange={() => {
                                     setIsAnonymous((prev) => {
-                                        if (!prev) setDonorName('Anonymous')
-                                        return !prev
+                                        if (!prev) setDonorName("Anonymous");
+                                        return !prev;
                                     });
                                 }}
                                 className="peer hidden"

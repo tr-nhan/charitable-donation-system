@@ -4,7 +4,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import { insertCampaignUpdateInfo } from "../../../services/api/campaignApi";
 
-function ManageCampaignUpdate({ campaignId }) {
+function ManageCampaignUpdate({ campaignId, isSuspend }) {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [helpText, setHelpText] = useState("");
@@ -14,6 +14,7 @@ function ManageCampaignUpdate({ campaignId }) {
     const richTextRef = useRef();
 
     const handleUpdateInfo = async () => {
+        if (isSuspend) return;
         if (!title.trim() || !content.trim()) {
             setHelpText("Title and description cannot be empty.");
             setHelpType("error");
@@ -53,6 +54,21 @@ function ManageCampaignUpdate({ campaignId }) {
 
     return (
         <div className="w-full max-w-3xl mx-auto bg-white shadow-md rounded-xl p-6 mt-6">
+            {isSuspend && (
+                <p
+                    style={{
+                        color: "red",
+                        backgroundColor: "#ffe5e5",
+                        padding: "10px",
+                        border: "1px solid red",
+                        borderRadius: "5px",
+                        marginBottom: "10px"
+                    }}>
+                    ⚠️ Your campaign has been suspended due to potential violations such as breaking
+                    our policies, receiving multiple reports, or other suspicious activities. Please
+                    contact our support team for more information.
+                </p>
+            )}
             <h1 className="text-2xl font-bold text-gray-800 mb-6">Update Campaign</h1>
 
             {/* Input Title */}
@@ -97,8 +113,8 @@ function ManageCampaignUpdate({ campaignId }) {
 
             {/* Submit Button */}
             <button
-                disabled={updating}
-                className={`ml-auto flex items-center justify-center gap-2 bg-green-800 hover:bg-green-950 text-white px-5 py-2 rounded-md font-medium transition duration-200 cursor-pointer ${updating ? "opacity-50 cursor-not-allowed" : ""}`}
+                disabled={updating || isSuspend}
+                className={`ml-auto flex items-center justify-center gap-2 bg-green-800 hover:bg-green-950 text-white px-5 py-2 rounded-md font-medium transition duration-200  ${updating || isSuspend ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                 onClick={handleUpdateInfo}>
                 {updating ? (
                     <>

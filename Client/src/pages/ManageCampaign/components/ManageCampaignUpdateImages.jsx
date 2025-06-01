@@ -6,7 +6,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import { insertCampaignUpdateImages } from "../../../services/api/campaignApi";
 
-function ManageCampaignUpdateImages({ campaignId }) {
+function ManageCampaignUpdateImages({ campaignId, isSuspend }) {
     const inputRef = useRef(null);
     const [previews, setPreviews] = useState([]);
     const [updateLoading, setUpdateLoading] = useState(false);
@@ -14,6 +14,7 @@ function ManageCampaignUpdateImages({ campaignId }) {
     const [messageType, setMessageType] = useState("");
 
     const handleChooseImages = () => {
+        if (isSuspend) return;
         setMessage("");
         setMessageType("");
 
@@ -38,6 +39,7 @@ function ManageCampaignUpdateImages({ campaignId }) {
     };
 
     const handleUpdateImages = async () => {
+        if (isSuspend) return;
         const files = previews.map((img) => img.file);
         if (files.length === 0) return;
 
@@ -76,6 +78,21 @@ function ManageCampaignUpdateImages({ campaignId }) {
 
     return (
         <div className="flex flex-col justify-start items-center text-gray-800 px-4">
+            {isSuspend && (
+                <p
+                    style={{
+                        color: "red",
+                        backgroundColor: "#ffe5e5",
+                        padding: "10px",
+                        border: "1px solid red",
+                        borderRadius: "5px",
+                        marginBottom: "10px"
+                    }}>
+                    ⚠️ Your campaign has been suspended due to potential violations such as breaking
+                    our policies, receiving multiple reports, or other suspicious activities. Please
+                    contact our support team for more information.
+                </p>
+            )}
             <h1 className="text-2xl font-bold text-gray-800 mb-1 mr-auto">
                 Update Campaign Images
             </h1>
@@ -101,6 +118,7 @@ function ManageCampaignUpdateImages({ campaignId }) {
                     multiple
                     ref={inputRef}
                     onChange={handleChooseImages}
+                    disabled={isSuspend}
                 />
             </div>
 
