@@ -58,6 +58,10 @@ app.use("/api/donation", donationRouter);
 const withdrawRouter = require("./routes/withdraw.route");
 app.use("/api/withdraw", withdrawRouter);
 
+//SendTips Router
+const tipsRoute = require("./routes/tips.route");
+app.use("/api", tipsRoute);
+
 server.listen(process.env.PORT, () => {
     console.log(`Server is running at PORT ${process.env.PORT}`);
 });
