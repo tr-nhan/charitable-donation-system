@@ -5,7 +5,7 @@ const insertDonationQuery = async (d) => {
     try {
         await client.query("BEGIN");
 
-        // insert into donations table
+        // 1. Insert donation record
         const donation = [
             d.campaignId,
             d.donorId,
@@ -23,78 +23,61 @@ const insertDonationQuery = async (d) => {
         ($1, $2, $3, $4, $5, $6, $7, $8)`;
         await client.query(queryD, donation);
 
-        // update user balance
-        var queryB = "";
-        var balance = [];
+        // 2. If fiat, update donor balance
         if (d.fiatAmount !== null) {
-            queryB = `
+            const queryB = `
             UPDATE user_balances
             SET fiat_balance = fiat_balance - $1
             WHERE user_id = $2`;
-            balance.push(d.fiatAmount);
-            balance.push(d.donorId);
-        } else {
-            queryB = `
-            UPDATE user_balances
-            SET crypto_balance = crypto_balance - $1
-            WHERE user_id = $2`;
-            balance.push(d.cryptoAmount);
-            balance.push(d.donorId);
+            await client.query(queryB, [d.fiatAmount, d.donorId]);
         }
-        await client.query(queryB, balance);
 
-        // update campaign raised
-        var queryC = "";
-        var campaign = [];
+        // 3. Update campaign raised amount
         if (d.fiatAmount !== null) {
-            queryC = `
+            const queryC = `
             UPDATE campaigns
             SET current_fiat = current_fiat + $1
             WHERE campaign_id = $2`;
-            campaign.push(d.fiatAmount);
-            campaign.push(d.campaignId);
-        } else {
-            queryC = `
+            await client.query(queryC, [d.fiatAmount, d.campaignId]);
+        } else if (d.cryptoAmount !== null) {
+            const queryC = `
             UPDATE campaigns
             SET current_crypto = current_crypto + $1
-            WHERE user_id = $2`;
-            campaign.push(d.cryptoAmount);
-            campaign.push(d.campaignId);
+            WHERE campaign_id = $2`;
+            await client.query(queryC, [d.cryptoAmount, d.campaignId]);
         }
-        await client.query(queryC, campaign);
 
-        // update campaign balance
-        const existCB = await client.query(
-            "SELECT * FROM campaign_balances WHERE campaign_id = $1",
-            [d.campaignId]
-        );
-        var queryCB = "";
-        const fiatTmp = d.fiatAmount || 0;
-        const cryptoTmp = d.cryptoAmount || 0;
-        if (existCB.rows.length === 1) {
-            queryCB = `
-            UPDATE campaign_balances
-            SET
-            fiat_amount = fiat_amount + $1,
-            crypto_amount = crypto_amount + $2
-            WHERE campaign_id = $3
-            `;
-            await client.query(queryCB, [fiatTmp, cryptoTmp, d.campaignId]);
-        } else {
-            queryCB = `
-            INSERT INTO campaign_balances
-            (campaign_id, fiat_amount, crypto_amount)
-            VALUES ($1, $2, $3)
-            `;
-            await client.query(queryCB, [d.campaignId, fiatTmp, cryptoTmp]);
+        // 4. Update campaign_balances only if fiat
+        if (d.fiatAmount !== null) {
+            const existCB = await client.query(
+                "SELECT * FROM campaign_balances WHERE campaign_id = $1",
+                [d.campaignId]
+            );
+            const fiatTmp = d.fiatAmount || 0;
+            const cryptoTmp = d.cryptoAmount || 0;
+
+            if (existCB.rows.length === 1) {
+                const queryCB = `
+                UPDATE campaign_balances
+                SET
+                    fiat_amount = fiat_amount + $1,
+                    crypto_amount = crypto_amount + $2
+                WHERE campaign_id = $3`;
+                await client.query(queryCB, [fiatTmp, cryptoTmp, d.campaignId]);
+            } else {
+                const queryCB = `
+                INSERT INTO campaign_balances
+                (campaign_id, fiat_amount, crypto_amount)
+                VALUES ($1, $2, $3)`;
+                await client.query(queryCB, [d.campaignId, fiatTmp, cryptoTmp]);
+            }
         }
 
         await client.query("COMMIT");
-
         return { error: 0 };
     } catch (error) {
         await client.query("ROLLBACK");
-        console.log(error);
+        console.error(error);
         return { error: 1, message: error };
     } finally {
         client.release();

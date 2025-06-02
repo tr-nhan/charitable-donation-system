@@ -42,14 +42,27 @@ function DonationInfo({ campaign }) {
     return (
         <div className="hidden md:block w-full h-fit max-w-sm bg-white rounded-2xl p-6 shadow-md">
             {/* Raised amount + percentage */}
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex flex-col justify-center items-start mb-4">
                 <div>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-3xl font-bold text-green-900">
                         {formatCurrencyVND(info.current_fiat)} raised
                     </p>
-                    <p className="text-sm text-gray-500">
-                        Goal {formatCurrencyVND(info.goal_fiat)} · {donations.stats.total_count}{" "}
-                        donations
+                    <div className="flex items-center gap-2 mt-1">
+                        <p className="text-sm text-gray-600">
+                            Goal {formatCurrencyVND(info.goal_fiat)} · {donations.stats.total_count}{" "}
+                            donations
+                        </p>
+                        <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded">
+                            Primary goal
+                        </span>
+                    </div>
+                </div>
+                <div className="mt-6">
+                    <p className="text-xl font-bold text-gray-900">
+                        {info.current_crypto} ETH raised
+                    </p>
+                    <p className="text-[12px] text-gray-500">
+                        Goal {info.goal_crypto} ETH · {donations.stats.total_count} donations
                     </p>
                 </div>
             </div>

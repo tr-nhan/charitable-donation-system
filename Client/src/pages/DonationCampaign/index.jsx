@@ -1,6 +1,15 @@
 import { useState, useEffect } from "react";
+import { ethers } from "ethers";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Button,
+    Typography
+} from "@mui/material";
 
 import { Loading } from "../../components/UI";
 import { getFullInfoCampaignById } from "../../services/api/campaignApi";
@@ -52,6 +61,10 @@ function DonationCampaign() {
     const [isAnonymous, setIsAnonymous] = useState(false);
     const [donorName, setDonorName] = useState("");
     const [message, setMessage] = useState("");
+    // meta mask
+    const [statusMetamask, setStatusMetamask] = useState("");
+    // dialog
+    const [openDialog, setOpenDialog] = useState(false);
 
     useEffect(() => {
         const fetchInitState = async () => {
@@ -109,19 +122,19 @@ function DonationCampaign() {
                     amount: { helptext: "Great! Your contribution is meaningful.", isValid: true }
                 }));
             }
-        } else {
-            if (num < 4) {
+        } else if (optionCurrency === "crypto") {
+            if (num < 0.001) {
                 setHelpText((prev) => ({
                     ...prev,
                     amount: {
-                        helptext: "Minimum donation for fiat is 4 VND.",
+                        helptext: "Minimum donation for fiat is 0.001 ETH.",
                         isValid: false
                     }
                 }));
             } else if (num > userBalance.crypto_balance) {
                 setHelpText((prev) => ({
                     ...prev,
-                    amount: { helptext: "You do not have enough USDT balance.", isValid: false }
+                    amount: { helptext: "You do not have enough ETH balance.", isValid: false }
                 }));
             } else if (
                 num + campaign.campaignInfo.current_crypto >
@@ -134,7 +147,27 @@ function DonationCampaign() {
             } else {
                 setHelpText((prev) => ({
                     ...prev,
-                    amount: { helptext: "Amazing! Every USDT makes a difference.", isValid: true }
+                    amount: { helptext: "Amazing! Every ETH makes a difference.", isValid: true }
+                }));
+            }
+        } else {
+            if (num < 0.001) {
+                setHelpText((prev) => ({
+                    ...prev,
+                    amount: {
+                        helptext: "Minimum donation for fiat is 0.001 ETH.",
+                        isValid: false
+                    }
+                }));
+            } else if (num > campaign.campaignInfo.goal_crypto) {
+                setHelpText((prev) => ({
+                    ...prev,
+                    amount: { helptext: "Donation exceeds campaign goal.", isValid: false }
+                }));
+            } else {
+                setHelpText((prev) => ({
+                    ...prev,
+                    amount: { helptext: "Amazing! Every ETH makes a difference.", isValid: true }
                 }));
             }
         }
@@ -216,7 +249,7 @@ function DonationCampaign() {
                 });
 
                 if (res.error === 0) {
-                    navigate(`/campaign/discover/${campaignId}`);
+                    setOpenDialog(true);
                 }
             } catch (error) {
                 console.log(error);
@@ -228,8 +261,62 @@ function DonationCampaign() {
         fetchDonation();
     };
 
+    const handleMetamask = async () => {
+        try {
+            setLoading(true);
+            if (!window.ethereum) throw new Error("Metamask not installed");
+
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const signer = await provider.getSigner();
+
+            const userAdd = campaign.campaignInfo.metamask_add;
+            const tx = await signer.sendTransaction({
+                to: userAdd,
+                value: ethers.parseEther(amount)
+            });
+
+            const receipt = await tx.wait();
+
+            if (receipt.status === 1) {
+                const res = await insertDonation({
+                    campaignId,
+                    donorId: userId,
+                    donorName,
+                    donorEmail: email,
+                    message,
+                    isAnonymous,
+                    fiatAmount: null,
+                    cryptoAmount: amount
+                });
+
+                if (res.error === 0) {
+                    setOpenDialog(true);
+                }
+            }
+        } catch (error) {
+            console.error("Donation failed", error);
+            setStatusMetamask("Donation failed");
+        } finally {
+            setLoading(false);
+            setHelpText({
+                amount: {
+                    helptext: "",
+                    isValid: false
+                },
+                info: {
+                    helpText: "",
+                    isValid: false
+                }
+            });
+        }
+    };
+
+    const onClose = () => {
+        navigate(`/campaign/discover/${campaignId}`);
+    };
+
     if (!campaign || !userBalance) return <Loading />;
-    if (campaign.campaignInfo.isSuspend) return navigate(`/campaign/discover/${campaignId}`) 
+    if (campaign.campaignInfo.isSuspend) return navigate(`/campaign/discover/${campaignId}`);
     return (
         <div className="p-0 md:py-10 w-full h-full bg-[#f4f2ec] flex justify-center items-center">
             <div className="md:p-10 px-5 py-10 bg-white md:rounded-3xl md:w-[45%] w-full">
@@ -303,9 +390,9 @@ function DonationCampaign() {
 
                         {/* Crypto Raised */}
                         <div className="flex flex-col">
-                            <span className="text-gray-600 text-sm mb-1">Crypto (USDT)</span>
+                            <span className="text-gray-600 text-sm mb-1">Crypto (ETH)</span>
                             <span className="text-green-700 font-bold text-base mb-1">
-                                {campaign.campaignInfo.current_crypto} USDT raised
+                                {campaign.campaignInfo.current_crypto} ETH raised
                             </span>
                             <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
                                 <div
@@ -350,10 +437,10 @@ function DonationCampaign() {
                             <input
                                 type="radio"
                                 name="donationType"
-                                value="crypto"
-                                checked={optionCurrency === "crypto"}
+                                value="metamask"
+                                checked={optionCurrency === "metamask"}
                                 onChange={() => {
-                                    setOptionCurrency("crypto");
+                                    setOptionCurrency("metamask");
                                     setAmount("");
                                     setHelpText((prev) => ({
                                         ...prev,
@@ -361,29 +448,51 @@ function DonationCampaign() {
                                     }));
                                 }}
                             />
-                            <span className="text-sm text-gray-700">USDT</span>
+                            <span className="text-sm text-gray-700">MetaMask (ETH)</span>
                         </label>
                     </div>
 
                     {/* Input Field */}
-                    <div className="flex flex-col">
-                        <label className="text-sm text-gray-600 mb-1 font-semibold">
-                            {optionCurrency === "fiat"
-                                ? `Your VND balance: ${formatCurrencyVND(userBalance.fiat_balance)}`
-                                : `Your USDT balance: ${userBalance.crypto_balance} USDT`}
-                        </label>
-                        <input
-                            type="number"
-                            value={amount}
-                            onChange={handleAmountChange}
-                            className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-700"
-                            placeholder={`Enter amount in ${optionCurrency === "fiat" ? "VND" : "USDT"}`}
-                        />
-                        <p
-                            className={`text-sm mt-1 ${helpText.amount.isValid ? "text-green-600" : "text-red-600"}`}>
-                            {helpText.amount.helptext}
-                        </p>
-                    </div>
+                    {optionCurrency !== "metamask" ? (
+                        <div className="flex flex-col">
+                            <label className="text-sm text-gray-600 mb-1 font-semibold">
+                                {optionCurrency === "fiat"
+                                    ? `Your VND balance: ${formatCurrencyVND(userBalance.fiat_balance)}`
+                                    : `Your ETH balance: ${userBalance.crypto_balance} ETH`}
+                            </label>
+                            <input
+                                type="number"
+                                value={amount}
+                                onChange={handleAmountChange}
+                                className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-700"
+                                placeholder={`Enter amount in ${optionCurrency === "fiat" ? "VND" : "ETH"}`}
+                            />
+                            <p
+                                className={`text-sm mt-1 ${helpText.amount.isValid ? "text-green-600" : "text-red-600"}`}>
+                                {helpText.amount.helptext}
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col">
+                            <label className="text-sm text-gray-600 mb-1 font-semibold">
+                                Enter the amount
+                            </label>
+                            <input
+                                type="number"
+                                value={amount}
+                                onChange={handleAmountChange}
+                                className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-700"
+                                placeholder={`Enter amount in ETH`}
+                            />
+                            <p
+                                className={`text-sm mt-1 ${helpText.amount.isValid ? "text-green-600" : "text-red-600"}`}>
+                                {helpText.amount.helptext}
+                            </p>
+                            <p className={`text-sm mt-1 text-red-600 font-semibold`}>
+                                {statusMetamask}
+                            </p>
+                        </div>
+                    )}
                 </div>
 
                 {/* Donor's info */}
@@ -472,7 +581,15 @@ function DonationCampaign() {
                     }
                     <button
                         disabled={!(helpText.amount.isValid && helpText.info.isValid)}
-                        onClick={handleDonation}
+                        onClick={() => {
+                            if (optionCurrency !== "metamask") {
+                                handleDonation();
+                                return;
+                            } else {
+                                handleMetamask();
+                                return;
+                            }
+                        }}
                         className={`mt-4 px-4 py-3 text-white rounded ${
                             helpText.amount.isValid && helpText.info.isValid
                                 ? "bg-green-800 hover:bg-green-950 cursor-pointer"
@@ -483,11 +600,33 @@ function DonationCampaign() {
                                 <CircularProgress className="animate-spin" />
                             </>
                         ) : (
-                            "Submit Update"
+                            "Donate"
                         )}
                     </button>
                 </div>
             </div>
+            <Dialog open={openDialog} onClose={onClose} maxWidth="sm" fullWidth>
+                <DialogTitle className="text-green-700 font-semibold">
+                    🎉 Thank You for Your Donation!
+                </DialogTitle>
+
+                <DialogContent>
+                    <Typography variant="body1" className="text-gray-700 mb-2">
+                        Your support means a lot! With your contribution, we can continue building
+                        better tools, helping more people, and making a bigger impact.
+                    </Typography>
+                    <Typography variant="body2" className="text-gray-600">
+                        Every donation helps will make a different life. Thank you for being part of
+                        our journey!
+                    </Typography>
+                </DialogContent>
+
+                <DialogActions>
+                    <Button onClick={onClose} variant="contained" color="success">
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

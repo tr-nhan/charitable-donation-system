@@ -1,15 +1,24 @@
 import { useState } from "react";
 
-import { WithdrawRequest } from "./components";
+import { WithdrawRequest, ReportManage, Dashboard } from "./components";
 
 const OPTIONS = [
     {
         label: "Dashboard",
         value: "dashboard",
+        component: () => <Dashboard />
+    },
+    {
+        label: "Withdraw Request",
+        value: "withdraw_request",
         component: () => <WithdrawRequest />
+    },
+    {
+        label: "Report Campaigns",
+        value: "report_campaigns",
+        component: () => <ReportManage />
     }
 ];
-
 
 function AdminDashboard() {
     const [active, setActive] = useState("dashboard");

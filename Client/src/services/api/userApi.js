@@ -18,9 +18,9 @@ const updateAvatar = async (formData) => {
     try {
         const res = await axios.post(`${SERVER_URL}/update/avatar`, formData, {
             headers: {
-                "Content-Type": "multipart/form-data",
+                "Content-Type": "multipart/form-data"
             },
-            withCredentials: true,
+            withCredentials: true
         });
         return res.data;
     } catch (error) {
@@ -37,6 +37,6 @@ const updateUser = async (data) => {
         console.log(error);
         return { error: 400, message: "Client fault" };
     }
-}
+};
 
 export { getUserInfo, updateAvatar, updateUser };

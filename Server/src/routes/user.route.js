@@ -7,11 +7,14 @@ const { uploadAvatar } = require("../middlewares/storeImgCloud/index");
 // get user info /api/user
 router.get("/", verifyLogIn, userController.getUser);
 
+// get user info by id
+router.get("/info", userController.getUserbyId);
+
 // update user's avatar /api/user/update/avatar
 router.post(
-    "/update/avatar", 
-    verifyLogIn, 
-    uploadAvatar.single("newAvatar"), 
+    "/update/avatar",
+    verifyLogIn,
+    uploadAvatar.single("newAvatar"),
     userController.updateAvatar
 );
 

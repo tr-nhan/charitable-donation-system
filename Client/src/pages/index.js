@@ -14,3 +14,5 @@ export { default as SearchCampaign } from "./SearchCampaign";
 export { default as DonationCampaign } from "./DonationCampaign";
 export { default as AdminDashboard } from "./AdminDashboard";
 export { default as ReportCampaign } from "./ReportCampaign";
+export { default as AdminManageCampaign } from "./AdminManageCampaign";
+export { default as DiscoverUser } from "./DiscoverUser";

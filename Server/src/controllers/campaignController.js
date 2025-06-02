@@ -15,7 +15,10 @@ const {
     filterCampaignsWithPagination,
     getCampaignBalanceQuery,
     getReportByCampaignId,
-    insertReportCampaignQuery
+    insertReportCampaignQuery,
+    getCampaignInfoFollowReportQuery,
+    updateCampaignSuspendStatusQuery,
+    updateMetamaskAddQuery
 } = require("../models/query/campaignsQuery");
 
 const getCategories = async (req, res) => {
@@ -39,7 +42,7 @@ const createCampaign = async (req, res) => {
             description: req.body.description,
             goal_fiat: req.body.goal_fiat,
             goal_crypto: req.body.goal_crypto || 0,
-            start_date: req.body.start_date || Date.now(),
+            start_date: req.body.start_date || null,
             end_date: req.body.end_date || null,
             campaign_image: req.file?.path,
             category: req.body.category
@@ -326,7 +329,6 @@ const filterCampaignsWithPaginationController = async (req, res) => {
             page = 0
         } = req.query;
 
-        // Gọi hàm truy vấn
         const result = await filterCampaignsWithPagination(
             q,
             parseInt(fromGoal),
@@ -358,7 +360,7 @@ const getCampaignBalance = async (req, res) => {
 
         const results = await getCampaignBalanceQuery(campaignId);
 
-        return res.json({ error: 0, results: results.rows[0] });
+        return res.json({ error: 0, results: results.rows[0] || [] });
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 1, message: "Server is broken" });
@@ -374,7 +376,6 @@ const insertReport = async (req, res) => {
 
         if (!campaignId || !reportText || !reportImages || !reporterId)
             return res.json({ error: 1, message: "Missing some required fields" });
-        
 
         await insertReportCampaignQuery({ campaignId, reportText, reportImages, reporterId });
 
@@ -382,6 +383,43 @@ const insertReport = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 0, message: "Server is broken" });
+    }
+};
+
+const getCampaignInfoFollowReport = async (req, res) => {
+    try {
+        const results = await getCampaignInfoFollowReportQuery();
+
+        res.json({ error: 0, results });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 0, message: "Server is broken" });
+    }
+};
+
+const updateCampaignSuspendStatus = async (req, res) => {
+    try {
+        const { status, campaignId } = req.body;
+
+        await updateCampaignSuspendStatusQuery(status, campaignId);
+
+        res.json({ error: 0, message: "Success" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 0, message: "Server is broken" });
+    }
+};
+
+const updateMetamaskAdd = async (req, res) => {
+    try {
+        const { add, campaignId } = req.body;
+
+        await updateMetamaskAddQuery(add, campaignId);
+
+        res.json({ error: 0, message: "Success" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 1, message: "Server is broken" });
     }
 };
 
@@ -398,5 +436,8 @@ module.exports = {
     insertCampaignUpdateImages,
     filterCampaignsWithPaginationController,
     getCampaignBalance,
-    insertReport
+    insertReport,
+    getCampaignInfoFollowReport,
+    updateCampaignSuspendStatus,
+    updateMetamaskAdd
 };

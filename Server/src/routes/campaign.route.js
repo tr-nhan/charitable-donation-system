@@ -58,4 +58,13 @@ router.post(
     campaignController.insertReport
 );
 
+// get campaign info following report /api/campaign/info/report [GET]
+router.get("/info/report", campaignController.getCampaignInfoFollowReport);
+
+// update campaign suspend /api/campaign/update/suspend [POST]
+router.post("/update/suspend", verifyLogIn, campaignController.updateCampaignSuspendStatus);
+
+// update campaign metamask add /api/campaign/update/metamask_add [POST]
+router.post("/update/metamask_add", verifyLogIn, campaignController.updateMetamaskAdd);
+
 module.exports = router;

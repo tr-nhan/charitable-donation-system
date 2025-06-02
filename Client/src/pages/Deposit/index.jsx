@@ -35,7 +35,7 @@ const PAYMENT_METHODS = [
     },
     {
         id: "binance",
-        name: "Binance USDT",
+        name: "Binance ETH",
         img: USDTLogo
     }
 ];
@@ -63,7 +63,7 @@ const POLICIES = {
         processingTime: "Instant - 10 minutes",
         fee: "",
         limit: [100, 10000],
-        currency: "USDT"
+        currency: "ETH"
     }
 };
 

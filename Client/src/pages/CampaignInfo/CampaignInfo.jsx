@@ -210,7 +210,7 @@ function CampaignInfo({ campaign }) {
                                 <>
                                     <span className="mx-1 text-gray-500">|</span>
                                     <span className="text-md font-medium text-green-600">
-                                        {parseFloat(info.goal_crypto).toLocaleString()} USDT
+                                        {parseFloat(info.goal_crypto).toLocaleString()} ETH
                                     </span>
                                 </>
                             )}
@@ -226,7 +226,7 @@ function CampaignInfo({ campaign }) {
                                 <>
                                     <span className="mx-1 text-gray-400">|</span>
                                     <span className="text-sm font-medium text-blue-400">
-                                        {parseFloat(info.current_crypto).toLocaleString()} USDT
+                                        {parseFloat(info.current_crypto).toLocaleString()} ETH
                                     </span>
                                 </>
                             )}
@@ -353,7 +353,7 @@ function CampaignInfo({ campaign }) {
                                     <li>•</li>
                                     <li>
                                         {donor.fiat_amount === 0
-                                            ? `${Number(donor.crypto_amount).toFixed(3)} USDT`
+                                            ? `${Number(donor.crypto_amount).toFixed(3)} ETH`
                                             : formatCurrencyVND(donor.fiat_amount)}
                                     </li>
                                     <li>•</li>

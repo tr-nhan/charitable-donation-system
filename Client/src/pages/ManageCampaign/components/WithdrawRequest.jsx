@@ -34,7 +34,7 @@ function WithdrawRequest({ campaignId, isSuspend }) {
         if (resultW.error === 0) setWithdrawRequests(resultW.results);
 
         const resultB = await getCampaignBalance(campaignId);
-        if (resultB.error === 0) setCampaignBalance(resultB.results);
+        if (resultB.error === 0) setCampaignBalance(resultB.results);        
     };
 
     useEffect(() => {

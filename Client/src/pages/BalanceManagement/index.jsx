@@ -212,7 +212,7 @@ function BalanceManagement() {
                         </div>
                         <div className="col-span-5 max-sm:col-span-6">
                             <h5 className="mb-2 font-semibold text-lg text-[#252525]">
-                                Binance (USDT only)
+                                Binance (ETH only)
                             </h5>
                             <p className="text-sm text-[#6f6f6f] leading-relaxed">
                                 Processing time{" "}
@@ -223,7 +223,7 @@ function BalanceManagement() {
                                 Fee <span className="text-[#252525] font-semibold"></span>
                                 <br />
                                 Limit{" "}
-                                <span className="text-[#252525] font-semibold">100 USDT - Max</span>
+                                <span className="text-[#252525] font-semibold">100 ETH - Max</span>
                             </p>
                         </div>
                         <div className="col-span-2 max-sm:col-span-1 flex justify-end">

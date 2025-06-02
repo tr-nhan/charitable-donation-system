@@ -27,6 +27,26 @@ const getUser = async (req, res) => {
     }
 };
 
+const getUserbyId = async (req, res) => {
+    const { userId } = req.body;
+
+    try {
+        let userInfo = await getInfoFilter({ user_id: userId });
+
+        if (userInfo.length > 0) {
+            userInfo = userInfo.map((user) => ({
+                ...user,
+                password_hash: ""
+            }));
+        }
+
+        res.json({ error: 0, results: userInfo });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 1, message: "Server is broken" });
+    }
+};
+
 const updateAvatar = async (req, res) => {
     let { oldAvatar, newAvatar } = req.body;
     const user_id = req.user.user_id;
@@ -71,5 +91,6 @@ const updateUserInfoController = async (req, res) => {
 module.exports = {
     getUser,
     updateAvatar,
-    updateUserInfoController
+    updateUserInfoController,
+    getUserbyId
 };

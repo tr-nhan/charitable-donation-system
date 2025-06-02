@@ -23,8 +23,8 @@ function MainMedia({ setData, saveData }) {
     };
 
     return (
-        <div className="px-[160px] w-full h-full flex flex-col justify-center items-start text-center ">
-            <h2 className="text-3xl font-semibold">Add a cover photo or video</h2>
+        <div className="md:px-[160px] px-2 w-full h-full flex flex-col justify-center md:items-start text-center ">
+            <h2 className="md:text-3xl text-2xl text-center font-semibold">Add a cover photo or video</h2>
             <p className="mt-2 text-sm">
                 Cover media helps tell your story. If you find a better photo later, you can always
                 change it.

@@ -172,6 +172,50 @@ const insertCampaignReports = async (formData) => {
     }
 };
 
+const getCampaignInfoFollowingReport = async () => {
+    try {
+        const res = await axios.get(`${SERVER_URL}/info/report`, {
+            withCredentials: true
+        });
+
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const updateCampaignMetamaskAdd = async (add, campaignId) => {
+    try {
+        const res = await axios.post(
+            `${SERVER_URL}/update/metamask_add`,
+            { add, campaignId },
+            {
+                withCredentials: true
+            }
+        );
+
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const updateCampaignSuspend = async (status, campaignId) => {
+    try {
+        const res = await axios.post(
+            `${SERVER_URL}/update/suspend`,
+            { status, campaignId },
+            {
+                withCredentials: true
+            }
+        );
+
+        return res.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export {
     getCategoriesCampaign,
     createCampaign,
@@ -185,5 +229,8 @@ export {
     insertCampaignUpdateImages,
     getCampaignsByFilter,
     getCampaignBalance,
-    insertCampaignReports
+    insertCampaignReports,
+    getCampaignInfoFollowingReport,
+    updateCampaignSuspend,
+    updateCampaignMetamaskAdd
 };

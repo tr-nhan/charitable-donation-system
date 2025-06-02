@@ -450,7 +450,7 @@ const updateCampaignBalanceQuery = async (campaignId, status, amount) => {
 };
 
 const insertReportCampaignQuery = async (r) => {
-    try {        
+    try {
         const query = `
         INSERT INTO campaign_reports
         (campaign_id, report_text, report_images, reporter_id)
@@ -458,7 +458,12 @@ const insertReportCampaignQuery = async (r) => {
         RETURNING *
         `;
 
-        const res = await pool.query(query, [r.campaignId, r.reportText, r.reportImages, r.reporterId]);
+        const res = await pool.query(query, [
+            r.campaignId,
+            r.reportText,
+            r.reportImages,
+            r.reporterId
+        ]);
 
         return res;
     } catch (error) {
@@ -482,6 +487,59 @@ const getReportByCampaignId = async (campaignId) => {
     }
 };
 
+const getCampaignInfoFollowReportQuery = async () => {
+    try {
+        const query = `
+            SELECT 
+            c.campaign_id,
+            c.title, 
+            c.campaign_image, 
+            COUNT(r.id) AS report_count
+            FROM campaign_reports r
+            JOIN campaigns c ON r.campaign_id = c.campaign_id
+            GROUP BY c.campaign_id, c.title, c.campaign_image
+            HAVING COUNT(r.id) > 0
+            ORDER BY report_count DESC;
+        `;
+
+        const res = await pool.query(query);
+        return res.rows;
+    } catch (error) {
+        console.error("Failed to fetch reported campaigns:", error);
+        return [];
+    }
+};
+
+const updateCampaignSuspendStatusQuery = async (status, campaignId) => {
+    try {
+        const query = `
+        UPDATE campaigns
+        SET "isSuspend" = $1
+        WHERE campaign_id = $2
+        `;
+
+        await pool.query(query, [status, campaignId]);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const updateMetamaskAddQuery = async (add, campaignId) => {
+    try {
+        const query = `
+        UPDATE campaigns
+        SET metamask_add = $1
+        WHERE campaign_id = $2
+        `;
+
+        await pool.query(query, [add, campaignId]);
+
+        return { error: 0 };
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 module.exports = {
     getCategoriesCampaigns,
     insertCampaign,
@@ -499,5 +557,8 @@ module.exports = {
     getCampaignBalanceQuery,
     updateCampaignBalanceQuery,
     insertReportCampaignQuery,
-    getReportByCampaignId
+    getReportByCampaignId,
+    getCampaignInfoFollowReportQuery,
+    updateCampaignSuspendStatusQuery,
+    updateMetamaskAddQuery
 };

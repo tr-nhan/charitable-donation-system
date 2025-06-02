@@ -5,12 +5,14 @@ import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import ThumbUpAltTwoToneIcon from "@mui/icons-material/ThumbUpAltTwoTone";
 import ThumbDownTwoToneIcon from "@mui/icons-material/ThumbDownTwoTone";
 import SentimentVerySatisfiedTwoToneIcon from "@mui/icons-material/SentimentVerySatisfiedTwoTone";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import { Loading } from "../../../components/UI";
 import {
     getFullInfoCampaignById,
     getCampaignsByUser,
-    getUpdatedInfoCampaign
+    getUpdatedInfoCampaign,
+    updateCampaignMetamaskAdd
 } from "../../../services/api/campaignApi";
 
 const formatCurrencyVND = (amount) => {
@@ -62,6 +64,9 @@ function ManageCampaignDashboard({ campaignId, isSuspend }) {
     const [isOverflow, setIsOverflow] = useState(false);
     // updated campaign data
     const [updatedCampaign, setUpdatedCampaign] = useState([]);
+    // wallet address
+    const [walletAdd, setWalletAdd] = useState(null);
+    const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
         const fetchToCheckValidCampaign = async () => {
@@ -82,6 +87,7 @@ function ManageCampaignDashboard({ campaignId, isSuspend }) {
             try {
                 const response = await getFullInfoCampaignById(campaignId);
                 setCampaign(response.results);
+                setWalletAdd(response.results.campaignInfo.metamask_add);
             } catch (error) {
                 console.error("Error fetching campaign data:", error);
             }
@@ -113,6 +119,21 @@ function ManageCampaignDashboard({ campaignId, isSuspend }) {
         return <Loading />;
     }
 
+    const handleChangeAdd = async () => {
+        try {
+            setUpdating(true);
+
+            const res = await updateCampaignMetamaskAdd(walletAdd, campaignId);
+
+            if (res.error === 0) return;
+            else setWalletAdd("Updating false, please try again!");
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setUpdating(false);
+        }
+    };
+
     return (
         <div className="w-full">
             {isSuspend && (
@@ -137,6 +158,55 @@ function ManageCampaignDashboard({ campaignId, isSuspend }) {
             {/* Thumbnail */}
             <img src={info.campaign_image} alt="" />
 
+            {/* Wallet address */}
+            <div className="mt-5 md:w-1/2 w-full mr-auto p-6 bg-white shadow-md rounded-xl space-y-4">
+                {/* Notice */}
+                {!walletAdd && (
+                    <div className="bg-yellow-100 text-yellow-800 text-sm p-3 rounded-md">
+                        ⚠️ Please enter your MetaMask wallet address so others can donate to you via
+                        crypto. This address will be public to donors.
+                    </div>
+                )}
+
+                {/* Input + Button */}
+                <div>
+                    <label
+                        htmlFor="wallet"
+                        className="block text-sm font-medium text-gray-700 mb-1">
+                        Wallet Address
+                    </label>
+                    <div className="flex gap-2">
+                        <input
+                            id="wallet"
+                            type="text"
+                            value={walletAdd}
+                            onChange={(e) => setWalletAdd(e.target.value)}
+                            placeholder="0x123...abc"
+                            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-green-500"
+                        />
+                        <button
+                            onClick={handleChangeAdd}
+                            className="px-4 py-2 bg-green-800 text-white rounded-md hover:bg-green-950 transition cursor-pointer">
+                            {updating ? (
+                                <div className="flex justify-center items-center gap-1">
+                                    <CircularProgress
+                                        className="animate-spin"
+                                        sx={{ color: "#032e15" }}
+                                        size={15}
+                                    />
+                                    Updating...
+                                </div>
+                            ) : (
+                                "Submit Update"
+                            )}
+                        </button>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-2">
+                        This will allow donors donate to this campaign through metamask.
+                    </p>
+                </div>
+            </div>
+
             {/* Goal and Currnent amout */}
             <div className="w-full flex justify-start items-center max-w-[700px]">
                 <div className="p-5 mt-4 w-full md:w-3/4 border border-[#e0ddd6] md:border-0 md:shadow-[0] grid grid-cols-6 gap-4 bg-white rounded-xl shadow-sm">
@@ -152,7 +222,7 @@ function ManageCampaignDashboard({ campaignId, isSuspend }) {
                                 <>
                                     <span className="mx-1 text-gray-500">|</span>
                                     <span className="text-md font-medium text-green-600">
-                                        {parseFloat(info.goal_crypto).toLocaleString()} USDT
+                                        {parseFloat(info.goal_crypto).toLocaleString()} ETH
                                     </span>
                                 </>
                             )}
@@ -168,7 +238,7 @@ function ManageCampaignDashboard({ campaignId, isSuspend }) {
                                 <>
                                     <span className="mx-1 text-gray-400">|</span>
                                     <span className="text-sm font-medium text-blue-400">
-                                        {parseFloat(info.current_crypto).toLocaleString()} USDT
+                                        {parseFloat(info.current_crypto).toLocaleString()} ETH
                                     </span>
                                 </>
                             )}
