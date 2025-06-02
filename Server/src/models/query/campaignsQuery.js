@@ -303,7 +303,7 @@ const filterCampaignsWithPagination = async (q, fromGoal, toGoal, categoryId, pa
     try {
         const limit = 20;
         const offset = (page - 1) * limit;
-
+        
         // Build dynamic filters
         const conditions = [];
         const values = [];

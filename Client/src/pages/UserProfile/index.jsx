@@ -3,7 +3,7 @@ import UserCampaigns from "./UserCampaigns";
 
 function UserProfile() {
     return (
-        <div className="px-5 w-full flex flex-col items-center justify-center h-screen">
+        <div className="w-full py-10 px-5 min-h-screen">
             <User />
             <hr className="w-full mt-7 border-[#e5e1d7]" />
             <UserCampaigns />

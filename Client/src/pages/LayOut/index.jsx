@@ -8,7 +8,7 @@ function Layout() {
     return (
         <div className="layout-container">
             <Header />
-            <main className="layout-content">
+            <main className="mt-[56px] md:mt-[80px]">
                 <Outlet />
             </main>
             <Footer />

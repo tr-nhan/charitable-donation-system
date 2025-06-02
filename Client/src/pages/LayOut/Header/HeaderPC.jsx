@@ -7,7 +7,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
-import MainLogo from "../../../assets/images/MainLogo.png";
+import MainLogo from "../../../assets/MainLogo.webp";
 import PopoverHeader from "./PopoverHeader";
 import { logout as logOutApi } from "../../../services/api/authApi.js";
 import { getUserInfo } from "../../../services/api/userApi";
@@ -33,7 +33,7 @@ const DONATION = {
         {
             title: "Supporter Space",
             subTitle: "How to create a fundraiser and our policies",
-            path: "/"
+            path: "/fundraising-tips"
         }
     ]
 };
@@ -46,62 +46,32 @@ const FUNDRAISING = {
         {
             title: "How to start a GoFundMe",
             subTitle: "Step-by-step help, examples, and more",
-            path: ""
-        },
-        {
-            title: "Fundraising tips",
-            subTitle: "The ultimate fundraising tips guide",
-            path: ""
+            path: "/fundraising-tips"
         },
         {
             title: "Fundraising categories",
             subTitle: "Find the right category for you",
-            path: ""
-        },
-        {
-            title: "Fundraising ideas",
-            subTitle: "Ideas to spark your creativity",
-            path: ""
-        },
-        {
-            title: "Team fundraising",
-            subTitle: "Fundraise together with a team",
-            path: ""
-        },
-        {
-            title: "Charity fundraising",
-            subTitle: "Fundraise for a charity",
-            path: ""
-        },
-        {
-            title: "Fundraising Blog",
-            subTitle: "Resources, tips, and more",
-            path: ""
-        },
-        {
-            title: "Sign up as a charity",
-            subTitle: "Claim your charity",
-            path: ""
+            path: "/categories"
         }
     ]
 };
 
-const ABOUT = {
-    name: "About",
-    title: "How it works, pricing, and more",
-    logo: ErrorOutlineIcon,
-    items: [
-        { title: "How GoFundMe works", subTitle: "", path: "" },
-        { title: "About GoFundMe and Classy", subTitle: "", path: "" },
-        { title: "GoFundMe Giving Guarantee", subTitle: "", path: "" },
-        { title: "Newsroom", subTitle: "", path: "" },
-        { title: "Supported countries", subTitle: "", path: "" },
-        { title: "Careers", subTitle: "", path: "" },
-        { title: "Pricing", subTitle: "", path: "" },
-        { title: "GoFundMe.org", subTitle: "", path: "" },
-        { title: "Help Center", subTitle: "", path: "" }
-    ]
-};
+// const ABOUT = {
+//     name: "About",
+//     title: "How it works, pricing, and more",
+//     logo: ErrorOutlineIcon,
+//     items: [
+//         { title: "How GoFundMe works", subTitle: "", path: "" },
+//         { title: "About GoFundMe and Classy", subTitle: "", path: "" },
+//         { title: "GoFundMe Giving Guarantee", subTitle: "", path: "" },
+//         { title: "Newsroom", subTitle: "", path: "" },
+//         { title: "Supported countries", subTitle: "", path: "" },
+//         { title: "Careers", subTitle: "", path: "" },
+//         { title: "Pricing", subTitle: "", path: "" },
+//         { title: "GoFundMe.org", subTitle: "", path: "" },
+//         { title: "Help Center", subTitle: "", path: "" }
+//     ]
+// };
 
 const USER = [
     {
@@ -113,9 +83,9 @@ const USER = [
         path: "/balance"
     },
     {
-        title: "My Fundraisers",
-        path: "/profile"
-    },
+        title: "How to start?",
+        path: "/fundraising-tips"
+    }
 ];
 
 function HeaderPC() {
@@ -162,8 +132,8 @@ function HeaderPC() {
     };
 
     return (
-        <header className="z-50 px-26 w-full flex flex-row justify-between items-center min-h-[80px] fixed flex-1 shadow text-[#252525] text-[16px] bg-white">
-            <nav className="flex flex-row justify-start items-center">
+        <header className="z-50 px-30 w-full flex flex-row justify-between items-center h-[80px] fixed shadow text-[#252525] text-[16px] bg-white">
+            <nav className="ml-48 flex flex-row justify-start items-center">
                 <Button
                     onClick={() => navigate("/campaign/search")}
                     size="small"
@@ -179,7 +149,7 @@ function HeaderPC() {
                     Search
                 </Button>
                 <PopoverHeader dataRender={DONATION} />
-                <PopoverHeader dataRender={FUNDRAISING} />
+                {/* <PopoverHeader dataRender={FUNDRAISING} /> */}
             </nav>
             <Avatar
                 src={MainLogo}
@@ -189,7 +159,7 @@ function HeaderPC() {
                 onClick={() => navigate("/")}
             />
             <nav className="flex flex-row justify-start items-center">
-                <PopoverHeader dataRender={ABOUT} right={true} />
+                <PopoverHeader dataRender={FUNDRAISING} right={true} />
                 {!isLoggedIn && (
                     <Button
                         size="small"

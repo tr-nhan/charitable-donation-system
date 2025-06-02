@@ -22,11 +22,16 @@ function ShareProfile({ open, onClose, data }) {
     }, [open]);
 
     useEffect(() => {
-        document.body.style.overflow = "hidden";
+        if (open) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+
         return () => {
             document.body.style.overflow = "auto";
         };
-    }, []);
+    }, [open]);
 
     if (!show) return null;
 

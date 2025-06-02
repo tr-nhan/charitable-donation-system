@@ -37,8 +37,6 @@ function User() {
                 setLoading(true);
                 const res = await getUserInfo({ user_id: user.user_id });
                 if (res.error === 0) {
-                    console.log(res.results[0]);
-                    
                     setUserInfo(res.results[0]);
                 }
             } catch (error) {
@@ -51,10 +49,6 @@ function User() {
         fetchUserInfo();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    // useEffect(() => {
-    //     window.location.reload();
-    // }, [userInfo.profile_image]);
 
     const handleUpdateAvatar = (e) => {
         const file = e.target.files[0];
@@ -116,7 +110,7 @@ function User() {
     };
 
     return (
-        <section className="w-full flex flex-col justify-start items-center">
+        <div className="w-full flex flex-col justify-start items-center">
             <div className="relative cursor-pointer" onClick={() => fileInputRef.current.click()}>
                 <Avatar
                     src={userInfo.profile_image}
@@ -130,7 +124,6 @@ function User() {
                     accept="image/*"
                     onChange={handleUpdateAvatar}
                 />
-                {/* <CameraAltOutlinedIcon className="absolute bottom-0 left-9" /> */}
             </div>
             <h1 className="mt-2 text-2xl font-semibold">{userInfo.full_name}</h1>
             {userInfo.bio ? (
@@ -199,7 +192,7 @@ function User() {
                         setUserInfo((prev) => ({ ...prev, bio: newBio }))
                     }></EditBioMobile>
             ) : (
-                <Dialog open={openEditBio}>
+                <Dialog disableScrollLock open={openEditBio}>
                     <div className="px-10 py-5 min-w-[600px]">
                         <div className="w-full flex justify-end">
                             <IconButton onClick={() => setOpenEditBio(false)}>
@@ -260,6 +253,7 @@ function User() {
                     </div>
                 </Dialog>
             )}
+
             {/* Share profile */}
             {isMobile ? (
                 <ShareProfile
@@ -268,6 +262,7 @@ function User() {
                     data={{ avatar: userInfo.profile_image, user_id: user.user_id }}></ShareProfile>
             ) : (
                 <Dialog
+                    disableScrollLock
                     open={openShareProfile}
                     onClose={() => setOpenShareProfile(false)}
                     PaperProps={{
@@ -334,7 +329,10 @@ function User() {
                         setUserInfo(newData);
                     }}></EditProfileMobile>
             ) : (
-                <Dialog open={openEditProfile} onClose={() => setOpenEditProfile(false)}>
+                <Dialog
+                    disableScrollLock
+                    open={openEditProfile}
+                    onClose={() => setOpenEditProfile(false)}>
                     <EditProfilePc
                         onClose={() => setOpenEditProfile(false)}
                         data={userInfo}
@@ -348,7 +346,7 @@ function User() {
                     />
                 </Dialog>
             )}
-        </section>
+        </div>
     );
 }
 
