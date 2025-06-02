@@ -2,7 +2,10 @@ const checkoutNodeJssdk = require("@paypal/checkout-server-sdk");
 const { client } = require("../config/paypalConfig");
 require("dotenv").config();
 
-const { insertTransaction } = require("../models/query/transactionQuery");
+const {
+    insertTransaction,
+    getTransactionHistoryQuery
+} = require("../models/query/transactionQuery");
 const { increaseUserBalance } = require("../models/query/userBalanceQuery");
 
 const newOrderPaypal = async (req, res) => {
@@ -73,4 +76,23 @@ const captureOrderPaypal = async (req, res) => {
     }
 };
 
-module.exports = { newOrderPaypal, captureOrderPaypal };
+const getTransactionHistory = async (req, res) => {
+    try {                
+        const { userId } = req.body;
+        if (!userId)
+            return res.status(400).json({ error: 1, message: "Missing some required fields" });
+
+        const results = await getTransactionHistoryQuery(userId);
+
+        results.historyDeposit = results.historyDeposit || [];
+        results.historyWithdraw = results.historyWithdraw || [];
+        results.historyDonation = results.historyDonation || [];
+
+        return res.json({ error: 0, results });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 0, message: "Server is broken" });
+    }
+};
+
+module.exports = { newOrderPaypal, captureOrderPaypal, getTransactionHistory };

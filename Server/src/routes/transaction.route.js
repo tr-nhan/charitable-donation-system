@@ -9,4 +9,7 @@ router.post("/deposit/paypal/create-order", verifyLogIn, transactionController.n
 // capture PAYPAL from client [POST] /api/transaction/deposit/paypal/capture
 router.post("/deposit/paypal/capture", verifyLogIn, transactionController.captureOrderPaypal);
 
+// get transaction history [POST] /api/transaction/history
+router.post("/history", transactionController.getTransactionHistory);
+
 module.exports = router;

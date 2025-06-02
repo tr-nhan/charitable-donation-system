@@ -24,7 +24,7 @@ const formatCurrencyVND = (amount) => {
         new Intl.NumberFormat("vi-VN", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 3
-        }).format(parsed) + "VND"
+        }).format(parsed) + " VND"
     );
 };
 
@@ -413,6 +413,15 @@ function DonationCampaign() {
                 {/* Donation Section */}
                 <div className="mt-6 mb-4">
                     <h2 className="text-xl font-semibold text-gray-800">Enter your donation</h2>
+                    {!campaign.campaignInfo.metamask_add && (
+                        <div className="mt-2 p-3 border-l-4 border-yellow-500 bg-yellow-50 text-yellow-800 rounded">
+                            <p className="font-medium">Note:</p>
+                            <p>
+                                This campaign does not support donations via MetaMask or crypto
+                                wallets. Please use another available payment method.
+                            </p>
+                        </div>
+                    )}
 
                     {/* Radio Selection */}
                     <div className="mt-4 flex items-center gap-6 mb-4">
@@ -478,10 +487,11 @@ function DonationCampaign() {
                                 Enter the amount
                             </label>
                             <input
+                                disabled={!campaign.campaignInfo.metamask_add}
                                 type="number"
                                 value={amount}
                                 onChange={handleAmountChange}
-                                className="border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-700"
+                                className={`border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-700 ${!campaign.campaignInfo.metamask_add && "cursor-not-allowed"}`}
                                 placeholder={`Enter amount in ETH`}
                             />
                             <p

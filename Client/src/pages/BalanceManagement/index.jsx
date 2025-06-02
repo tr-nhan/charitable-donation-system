@@ -21,7 +21,7 @@ function BalanceManagement() {
 
     useEffect(() => {
         const fetchUserBalance = async () => {
-            const res = await getUserBalance(userId);            
+            const res = await getUserBalance(userId);
 
             setBalances(() => {
                 return {
@@ -101,43 +101,21 @@ function BalanceManagement() {
                         fontSize: "13px",
                         paddingX: "20px"
                     }}
-                    onClick={() => navigate("history-transaction")}>
+                    onClick={() => navigate("/transaction/history")}>
                     History Transaction
                 </Button>
             </div>
 
             <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6 px-4 font-sans">
-                {/* Button Payme */}
-                <button
-                    onClick={() => navigate("/deposit/payme")}
-                    className="p-5 border border-[#e0ddd6] rounded-xl bg-white shadow-sm hover:shadow-md hover:scale-[1.01] active:scale-95 transform transition-all duration-300 w-full text-left cursor-pointer">
-                    <div className="w-full grid grid-cols-8 gap-2 items-start">
-                        <div className="col-span-1 flex justify-center pt-1">
-                            <Avatar src={PaymeLogo} variant="rounded" />
-                        </div>
-                        <div className="col-span-5 max-sm:col-span-6">
-                            <h5 className="mb-2 font-semibold text-lg text-[#252525]">Payme</h5>
-                            <p className="text-sm text-[#6f6f6f] leading-relaxed">
-                                Processing time{" "}
-                                <span className="text-[#252525] font-semibold">
-                                    Instant - 10 minutes
-                                </span>
-                                <br />
-                                Fee <span className="text-[#252525] font-semibold">0%</span>
-                                <br />
-                                Limit{" "}
-                                <span className="text-[#252525] font-semibold">
-                                    {formatCurrencyVND(10000)} - {formatCurrencyVND(10000000)}
-                                </span>
-                            </p>
-                        </div>
-                        <div className="col-span-2 max-sm:col-span-1 flex justify-end">
-                            <div className="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-2xl font-medium">
-                                Recommended
-                            </div>
-                        </div>
-                    </div>
-                </button>
+                {/* Notice if user prefers not to deposit */}
+                <div className="col-span-full mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-md shadow-sm">
+                    <h4 className="font-semibold text-yellow-800 mb-1">Don't want to deposit?</h4>
+                    <p className="text-sm text-yellow-700 leading-relaxed">
+                        If you don't feel comfortable depositing to our platform, it's totally fine
+                        — you can still support a campaign directly using MetaMask. We support
+                        crypto donations and verify the transaction securely.
+                    </p>
+                </div>
                 {/* Button Paypal*/}
                 <button
                     onClick={() => navigate("/deposit/paypal")}
@@ -195,41 +173,9 @@ function BalanceManagement() {
                             </p>
                         </div>
                         <div className="col-span-2 max-sm:col-span-1 flex justify-end">
-                            <div className="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-2xl font-medium">
+                            <div className="px-2 py-1 bg-green-100 text-red-600 text-xs rounded-2xl font-medium">
                                 Mantance
                             </div>
-                        </div>
-                    </div>
-                </button>
-
-                {/* Button Binance */}
-                <button
-                    onClick={() => navigate("/deposit/binance")}
-                    className="p-5 border border-[#e0ddd6] rounded-xl bg-white shadow-sm hover:shadow-md hover:scale-[1.01] active:scale-95 transform transition-all duration-300 w-full text-left cursor-pointer">
-                    <div className="w-full grid grid-cols-8 gap-2 items-start">
-                        <div className="col-span-1 flex justify-center pt-1">
-                            <Avatar src={USDTLogo} variant="rounded" />
-                        </div>
-                        <div className="col-span-5 max-sm:col-span-6">
-                            <h5 className="mb-2 font-semibold text-lg text-[#252525]">
-                                Binance (ETH only)
-                            </h5>
-                            <p className="text-sm text-[#6f6f6f] leading-relaxed">
-                                Processing time{" "}
-                                <span className="text-[#252525] font-semibold">
-                                    Instant - 10 minutes
-                                </span>
-                                <br />
-                                Fee <span className="text-[#252525] font-semibold"></span>
-                                <br />
-                                Limit{" "}
-                                <span className="text-[#252525] font-semibold">100 ETH - Max</span>
-                            </p>
-                        </div>
-                        <div className="col-span-2 max-sm:col-span-1 flex justify-end">
-                            {/* <div className="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-2xl font-medium">
-                                Recommended
-                            </div> */}
                         </div>
                     </div>
                 </button>
