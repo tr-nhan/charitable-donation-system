@@ -32,6 +32,8 @@ import {
 import { fetchLoginStatus } from "./redux/authSlice";
 import CategoriesPage from "./pages/Categories";
 import FundraisingTips from "./pages/FundraisingTips";
+import CommonQuestionsPage from "./pages/CommonQuestions";
+import HelpCenter from "./pages/HelpCenter";
 
 function App() {
     const dispatch = useDispatch();
@@ -81,6 +83,8 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/categories" element={<CategoriesPage   />} />
                 <Route path="/fundraising-tips" element={<FundraisingTips   />} />
+                <Route path="/common-questions" element={<CommonQuestionsPage   />} />
+                <Route path="/help-center" element={<HelpCenter   />} />
             </Route>
 
             <Route path="login-success" element={<LoginSuccess />} />
