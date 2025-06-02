@@ -58,7 +58,7 @@ const getUserBalance = async (conditions) => {
         const query = `SELECT * FROM user_balances WHERE ${whereClause}`;
 
         const res = await pool.query(query, values);
-
+        
         return res.rows[0];
     } catch (err) {
         console.error(err);

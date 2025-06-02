@@ -13,9 +13,16 @@ import {
     BalanceManagement,
     Deposit,
     PageNotFound,
-    CampaignInfo
+    CampaignInfo,
+    ManageCampaign,
+    SearchCampaign,
+    DonationCampaign,
+    AdminDashboard,
+    ReportCampaign,
+    AdminManageCampaign,
+    DiscoverUser
 } from "./pages";
-import { GuestRoute, PrivateRoute } from "./components/FilterRoutes";
+import { GuestRoute, PrivateRoute, AdminRoute } from "./components/FilterRoutes";
 import {
     LoginSuccess,
     VerifyComponent,
@@ -37,19 +44,35 @@ function App() {
         <Routes>
             <Route path="/verify/sign-up" element={<VerifyComponent />} />
 
+            {/* Admin route */}
+            <Route element={<AdminRoute />}>
+                <Route element={<LayOut />}>
+                    <Route path="/admin" element={<AdminDashboard />} />
+                    <Route
+                        path="/admin/manage/campaign/:campaignId"
+                        element={<AdminManageCampaign />}
+                    />
+                </Route>
+            </Route>
+
             {/* Guess route */}
             <Route element={<GuestRoute />}>
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route path="/sign-up" element={<SignUp />} />
             </Route>
 
-            {/* Private route */}
+            {/* Private user route */}
             <Route element={<PrivateRoute />}>
                 <Route element={<LayOut />}>
                     <Route path="/profile" element={<UserProfile />} />
                     <Route path="/balance" element={<BalanceManagement />} />
                     <Route path="/deposit/:method" element={<Deposit />} />
                     <Route path="/campaign/discover/:campaignId" element={<CampaignInfo />} />
+                    <Route path="/campaign/manage/:campaignId" element={<ManageCampaign />} />
+                    <Route path="/campaign/search" element={<SearchCampaign />} />
+                    <Route path="/donation/:campaignId" element={<DonationCampaign />} />
+                    <Route path="/campaign/report/:campaignId" element={<ReportCampaign />} />
+                    <Route path="/user/discover/:userId" element={<DiscoverUser />} />
                 </Route>
                 <Route path="/create-campaign" element={<CreateCampaign />} />
             </Route>

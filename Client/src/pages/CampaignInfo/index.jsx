@@ -14,6 +14,8 @@ function CampaignFullInfo() {
         const fetchFullInfoCampaign = async () => {
             const res = await getFullInfoCampaignById(campaignId);
             if (res.error === 0) {
+                console.log(res.results);
+                
                 setCampaign(res.results);
             }
         };

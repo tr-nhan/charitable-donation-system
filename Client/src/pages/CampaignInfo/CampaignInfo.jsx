@@ -113,6 +113,7 @@ function CampaignInfo({ campaign }) {
     }, []);
 
     const handleChangeReaction = async (type) => {
+        if (info.isSuspend) return;
         if (reactionChoice === type) {
             setReactionChoice(null);
             const res = await deleteCampaignReaction({ campaignId: info.campaign_id });
@@ -170,6 +171,23 @@ function CampaignInfo({ campaign }) {
 
     return (
         <div className="w-full col-span-3 md:col-span-2">
+            {info.isSuspend && (
+                <p
+                    style={{
+                        color: "red",
+                        backgroundColor: "#ffe5e5",
+                        padding: "10px",
+                        border: "1px solid red",
+                        borderRadius: "5px",
+                        marginBottom: "15px"
+                    }}>
+                    ⚠️ This campaign has been suspended due to suspicious activity, including
+                    potential scam behavior, multiple user reports, or violations of our platform
+                    policies. Please proceed with caution and contact our support team if you need
+                    further clarification.
+                </p>
+            )}
+
             {/* Title */}
             <h1 className="mb-4 text-3xl font-semibold">{info.title}</h1>
 
@@ -192,7 +210,7 @@ function CampaignInfo({ campaign }) {
                                 <>
                                     <span className="mx-1 text-gray-500">|</span>
                                     <span className="text-md font-medium text-green-600">
-                                        {parseFloat(info.goal_crypto).toLocaleString()} USDT
+                                        {parseFloat(info.goal_crypto).toLocaleString()} ETH
                                     </span>
                                 </>
                             )}
@@ -208,7 +226,7 @@ function CampaignInfo({ campaign }) {
                                 <>
                                     <span className="mx-1 text-gray-400">|</span>
                                     <span className="text-sm font-medium text-blue-400">
-                                        {parseFloat(info.current_crypto).toLocaleString()} USDT
+                                        {parseFloat(info.current_crypto).toLocaleString()} ETH
                                     </span>
                                 </>
                             )}
@@ -335,7 +353,7 @@ function CampaignInfo({ campaign }) {
                                     <li>•</li>
                                     <li>
                                         {donor.fiat_amount === 0
-                                            ? `${Number(donor.crypto_amount).toFixed(3)} USDT`
+                                            ? `${Number(donor.crypto_amount).toFixed(3)} ETH`
                                             : formatCurrencyVND(donor.fiat_amount)}
                                     </li>
                                     <li>•</li>
@@ -369,18 +387,24 @@ function CampaignInfo({ campaign }) {
 
             {/* List of Images */}
             {images.length > 0 && (
-                <div className="py-3 px-5 flex flex-row justify-start items-center gap-5 border-[#e0ddd6] shadow-sm">
-                    {images.map((img, i) => {
-                        return (
-                            <div key={i} className="w-[100px] h-[100px] rounded-lg overflow-hidden">
+                <div className="mt-6 py-3 overflow-x-auto w-full">
+                    <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2 italic">
+                        Images
+                    </h2>
+                    <hr className="mb-4 border-[#e0ddd6]" />
+                    <div className="flex flex-row items-center gap-5 w-max mr-auto ml-auto">
+                        {images.map((img, i) => (
+                            <div
+                                key={i}
+                                className="w-[100px] h-[100px] rounded-lg overflow-hidden shrink-0">
                                 <img
                                     src={img}
                                     alt="Campaign_Img"
                                     className="w-full h-full object-cover"
                                 />
                             </div>
-                        );
-                    })}
+                        ))}
+                    </div>
                 </div>
             )}
 
@@ -391,7 +415,13 @@ function CampaignInfo({ campaign }) {
                     className="col-span-2 w-full py-3 bg-green-100 text-green-800 font-medium rounded-2xl hover:bg-green-200 transition-colors duration-200 cursor-pointer">
                     Share
                 </button>
-                <button className="col-span-4 w-full py-3 bg-green-800 text-white font-semibold rounded-2xl hover:bg-green-900 transition-colors duration-200 shadow-md cursor-pointer">
+                <button
+                    disabled={userId === info.creator_id || info.isSuspend}
+                    onClick={() => {
+                        if (info.isSuspend) return;
+                        navigate(`/donation/${info.campaign_id}`);
+                    }}
+                    className="col-span-4 w-full py-3 bg-green-800 text-white font-semibold rounded-2xl hover:bg-green-900 transition-colors duration-200 shadow-md cursor-pointer">
                     Donation
                 </button>
                 {/* Share campaign */}
@@ -405,7 +435,7 @@ function CampaignInfo({ campaign }) {
                 />
             </div>
 
-            {/* Update Info */}
+            {/* Updated Info */}
             {info.update_time > 0 && (
                 <div className="mt-6 bg-white rounded-xl py-5">
                     {/* Heading */}
@@ -468,7 +498,7 @@ function CampaignInfo({ campaign }) {
                         Is there something wrong?
                     </span>
                     <button
-                        onClick={() => navigate(`/report/campaign/${info.campaign_id}`)}
+                        onClick={() => navigate(`/campaign/report/${info.campaign_id}`)}
                         className="text-sm text-red-600 hover:text-red-800 font-semibold underline transition duration-150 ease-in-out cursor-pointer">
                         Report this campaign
                     </button>

@@ -56,8 +56,17 @@ function SignInPC() {
                 return;
             }
 
-            dispatch(login(res.results));
-            navigate("/");
+            if (res.error === 0) {
+                dispatch(login(res.results));
+                
+                if (res.results.email?.toLowerCase() === "admin@gmail.com") {
+                    console.log("called");
+                    
+                    navigate("/admin");
+                } else {
+                    navigate("/");
+                }
+            }
         } catch (error) {
             console.log(error);
         } finally {

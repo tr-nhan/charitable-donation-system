@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
+import { Loading } from "../UI";
 import { capturePaypal } from "../../services/api/transactionApi";
 
 function DepositSuccess() {
@@ -19,6 +20,7 @@ function DepositSuccess() {
             const fetchCapturePaypal = async () => {
                 try {
                     const res = await capturePaypal(orderId, fiatAmount);
+
                     if (res.error === 0) navigate("/balance");
                 } catch (error) {
                     console.log(error);
@@ -30,11 +32,7 @@ function DepositSuccess() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    return (
-        <>
-            <div>Method: {method}</div>
-        </>
-    );
+    return <Loading></Loading>;
 }
 
 export default DepositSuccess;

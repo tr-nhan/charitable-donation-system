@@ -8,7 +8,17 @@ const {
     getDonations,
     insertReaction,
     updateReaction,
-    deleteReaction
+    deleteReaction,
+    getUpdatedInfo,
+    insertUpdateInfo,
+    updateCampaignImages,
+    filterCampaignsWithPagination,
+    getCampaignBalanceQuery,
+    getReportByCampaignId,
+    insertReportCampaignQuery,
+    getCampaignInfoFollowReportQuery,
+    updateCampaignSuspendStatusQuery,
+    updateMetamaskAddQuery
 } = require("../models/query/campaignsQuery");
 
 const getCategories = async (req, res) => {
@@ -77,6 +87,7 @@ const getFullInfoCampaign = async (req, res) => {
         var campaignImgs = await getCampaignImgs(campaignId);
         var campaignReactions = await getCampaignReactions({ campaign_id: campaignId });
         var campaignDonations = await getDonations({ campaign_id: campaignId });
+        var campaignReports = await getReportByCampaignId(campaignId);
 
         if (campaignInfo.length === 1) {
             const campaign = campaignInfo[0];
@@ -99,8 +110,8 @@ const getFullInfoCampaign = async (req, res) => {
         }
 
         if (campaignImgs.length !== 0) {
-            var imgs = campaignImgs.image_url;
-            imgs = imgs.trim().split(",");
+            var imgs = campaignImgs[0].image_url;
+            imgs = imgs.split(",");
             results.campaignImages = imgs;
         } else results.campaignImages = [];
 
@@ -160,6 +171,11 @@ const getFullInfoCampaign = async (req, res) => {
                 data: campaignDonations.donations
             };
         }
+
+        results.campaignReports = {
+            count: campaignReports.length,
+            data: campaignReports
+        };
 
         return res.json({ error: 0, results });
     } catch (error) {
@@ -237,6 +253,176 @@ const deleteCampaignReaction = async (req, res) => {
     }
 };
 
+const getUpdatedInfoCampaign = async (req, res) => {
+    try {
+        const { campaignId } = req.body;
+
+        if (!campaignId) {
+            return res.status(400).json({ error: 1, message: "Missing campaign ID" });
+        }
+        const updates = await getUpdatedInfo(campaignId);
+
+        res.status(200).json({ error: 0, results: updates });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 1, message: "Server is broken" });
+    }
+};
+
+const insertCampaignUpdate = async (req, res) => {
+    try {
+        const { campaignId, title, content } = req.body;
+        const userId = req.user.user_id;
+
+        if (!campaignId || !title || !content) {
+            return res.status(400).json({ error: 1, message: "Missing some required fields" });
+        }
+
+        const updateData = {
+            campaignId,
+            authorId: userId,
+            title,
+            content
+        };
+
+        const newUpdate = await insertUpdateInfo(updateData);
+
+        if (newUpdate) {
+            return res.status(200).json({ error: 0, message: "Update added successfully" });
+        } else {
+            return res.status(500).json({ error: 1, message: "Failed to add update" });
+        }
+    } catch (error) {
+        console.error("Error inserting campaign update:", error);
+        return res.status(500).json({ error: 1, message: "Server is broken" });
+    }
+};
+
+const insertCampaignUpdateImages = async (req, res) => {
+    try {
+        const { campaignId } = req.body;
+        if (!campaignId) {
+            return res.status(400).json({ error: 1, message: "Missing campaign ID" });
+        }
+        const uploadedImages = req.files;
+
+        const image_urls = uploadedImages.map((file) => file.path).join(",");
+        const updatedCampaign = await updateCampaignImages(campaignId, image_urls);
+        if (updatedCampaign) {
+            return res.status(200).json({ error: 0, message: "Images added successfully" });
+        } else {
+            return res.status(500).json({ error: 1, message: "Failed to add images" });
+        }
+    } catch (error) {
+        console.error("Error inserting campaign update images:", error);
+        return res.status(500).json({ error: 1, message: "Server is broken" });
+    }
+};
+
+const filterCampaignsWithPaginationController = async (req, res) => {
+    try {
+        const {
+            q = "",
+            fromGoal = 0,
+            toGoal = Number.MAX_SAFE_INTEGER,
+            categoryId = null,
+            page = 0
+        } = req.query;
+
+        const result = await filterCampaignsWithPagination(
+            q,
+            parseInt(fromGoal),
+            parseInt(toGoal),
+            categoryId ? parseInt(categoryId) : null,
+            parseInt(page)
+        );
+
+        res.status(200).json({
+            error: 0,
+            message: "Filter campaigns successfully",
+            results: result
+        });
+    } catch (error) {
+        console.error("Error in filterCampaignsWithPaginationController:", error);
+        res.status(500).json({
+            success: false,
+            message: "Server error while filtering campaigns"
+        });
+    }
+};
+
+const getCampaignBalance = async (req, res) => {
+    try {
+        const { campaignId } = req.body;
+
+        if (!campaignId)
+            return res.status(400).json({ error: 1, message: "Missing some required fields" });
+
+        const results = await getCampaignBalanceQuery(campaignId);
+
+        return res.json({ error: 0, results: results.rows[0] || [] });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 1, message: "Server is broken" });
+    }
+};
+
+const insertReport = async (req, res) => {
+    try {
+        const { campaignId, reportText, reporterId } = req.body;
+
+        const uploadedImages = req.files;
+        const reportImages = uploadedImages.map((file) => file.path).join(",");
+
+        if (!campaignId || !reportText || !reportImages || !reporterId)
+            return res.json({ error: 1, message: "Missing some required fields" });
+
+        await insertReportCampaignQuery({ campaignId, reportText, reportImages, reporterId });
+
+        res.json({ error: 0, message: "Success" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 0, message: "Server is broken" });
+    }
+};
+
+const getCampaignInfoFollowReport = async (req, res) => {
+    try {
+        const results = await getCampaignInfoFollowReportQuery();
+
+        res.json({ error: 0, results });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 0, message: "Server is broken" });
+    }
+};
+
+const updateCampaignSuspendStatus = async (req, res) => {
+    try {
+        const { status, campaignId } = req.body;
+
+        await updateCampaignSuspendStatusQuery(status, campaignId);
+
+        res.json({ error: 0, message: "Success" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 0, message: "Server is broken" });
+    }
+};
+
+const updateMetamaskAdd = async (req, res) => {
+    try {
+        const { add, campaignId } = req.body;
+
+        await updateMetamaskAddQuery(add, campaignId);
+
+        res.json({ error: 0, message: "Success" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 1, message: "Server is broken" });
+    }
+};
+
 module.exports = {
     getCategories,
     createCampaign,
@@ -244,5 +430,14 @@ module.exports = {
     getFullInfoCampaign,
     insertCampaignReaction,
     updateCampaignReaction,
-    deleteCampaignReaction
+    deleteCampaignReaction,
+    getUpdatedInfoCampaign,
+    insertCampaignUpdate,
+    insertCampaignUpdateImages,
+    filterCampaignsWithPaginationController,
+    getCampaignBalance,
+    insertReport,
+    getCampaignInfoFollowReport,
+    updateCampaignSuspendStatus,
+    updateMetamaskAdd
 };

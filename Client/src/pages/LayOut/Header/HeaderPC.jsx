@@ -21,24 +21,19 @@ const DONATION = {
     logo: FavoriteBorderIcon,
     items: [
         {
-            title: "Categories",
-            subTitle: "Browse fundraisers by category",
-            path: "/discover"
+            title: "Create a fundraiser",
+            subTitle: "Start a fundraiser for yourself or a cause",
+            path: "/create-campaign"
         },
         {
-            title: "Crisis relief",
-            subTitle: "Donate to verified relief",
-            path: "/c/act"
-        },
-        {
-            title: "Social Impact Funds",
-            subTitle: "Direct support for urgent needs",
-            path: "/c/cause"
+            title: "Deposit funds",
+            subTitle: "Deposit funds to your UIT-FundMe account",
+            path: "/balance"
         },
         {
             title: "Supporter Space",
-            subTitle: "Inspiration, FAQs, and where to give",
-            path: "/c/supporter-space"
+            subTitle: "How to create a fundraiser and our policies",
+            path: "/"
         }
     ]
 };
@@ -119,16 +114,8 @@ const USER = [
     },
     {
         title: "My Fundraisers",
-        path: "/my-fundraisers"
+        path: "/profile"
     },
-    {
-        title: "My Impact",
-        path: "/my-impact"
-    },
-    {
-        title: "Settings",
-        paht: "/settings"
-    }
 ];
 
 function HeaderPC() {
@@ -178,6 +165,7 @@ function HeaderPC() {
         <header className="z-50 px-26 w-full flex flex-row justify-between items-center min-h-[80px] fixed flex-1 shadow text-[#252525] text-[16px] bg-white">
             <nav className="flex flex-row justify-start items-center">
                 <Button
+                    onClick={() => navigate("/campaign/search")}
                     size="small"
                     startIcon={<SearchIcon />}
                     sx={{

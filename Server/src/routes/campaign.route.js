@@ -30,4 +30,41 @@ router.post("/reaction/update", verifyLogIn, campaignController.updateCampaignRe
 // delete campaign reaction /api/campaign/reaction/delete [POST]
 router.post("/reaction/delete", verifyLogIn, campaignController.deleteCampaignReaction);
 
+// get updated info of a campaign /api/campaign/updates [POST]
+router.post("/updates", verifyLogIn, campaignController.getUpdatedInfoCampaign);
+
+// add campaign update /api/campaign/updates/insert/info [POST]
+router.post("/updates/insert/info", verifyLogIn, campaignController.insertCampaignUpdate);
+
+// add campaign update images /api/campaign/updates/insert/images [POST]
+router.post(
+    "/updates/insert/images",
+    verifyLogIn,
+    uploadCampaign.array("updateImages"),
+    campaignController.insertCampaignUpdateImages
+);
+
+// filter campaign with pagination
+router.get("/filter", campaignController.filterCampaignsWithPaginationController);
+
+// get campaign balance
+router.post("/balance", campaignController.getCampaignBalance);
+
+// insert campaign report /api/campaign/report/insert [POST]
+router.post(
+    "/report/insert",
+    verifyLogIn,
+    uploadCampaign.array("reportImages"),
+    campaignController.insertReport
+);
+
+// get campaign info following report /api/campaign/info/report [GET]
+router.get("/info/report", campaignController.getCampaignInfoFollowReport);
+
+// update campaign suspend /api/campaign/update/suspend [POST]
+router.post("/update/suspend", verifyLogIn, campaignController.updateCampaignSuspendStatus);
+
+// update campaign metamask add /api/campaign/update/metamask_add [POST]
+router.post("/update/metamask_add", verifyLogIn, campaignController.updateMetamaskAdd);
+
 module.exports = router;

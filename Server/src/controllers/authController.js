@@ -35,7 +35,8 @@ const loginWithLocal = (req, res, next) => {
             message: "Login successful",
             results: {
                 user_id: user.user_id,
-                email: user.email
+                email: user.email,
+                role: user.email === "admin@gmail.com" ? "admin" : "user"
             }
         });
     })(req, res, next);
@@ -49,7 +50,7 @@ const loginWithGoogle = (req, res) => {
     const token = jwt.sign({ user_id: user.user_id, email: user.email }, process.env.SECRET_KEY, {
         expiresIn: "7d"
     });
-    
+
     res.cookie("token", token, {
         httpOnly: true,
         secure: true,
@@ -86,7 +87,10 @@ const checkLogin = async (req, res) => {
 
         if (user.length === 0) return res.json({ error: 3, message: "User not found" });
 
-        return res.json({ error: 0, results: { user_id, email } });
+        return res.json({
+            error: 0,
+            results: { user_id, email, role: email === "admin@gmail.com" ? "admin" : "user" }
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 1, message: "Server is broken" });

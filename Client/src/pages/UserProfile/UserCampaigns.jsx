@@ -6,6 +6,17 @@ import { Button, Avatar } from "@mui/material";
 import { getCampaignsByUser } from "../../services/api/campaignApi";
 import Loading from "../../components/UI/Loading";
 
+const formatCurrencyVND = (amount) => {
+    const parsed = parseFloat(amount);
+    if (isNaN(parsed)) return "0 VND";
+    return (
+        new Intl.NumberFormat("vi-VN", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 3
+        }).format(parsed) + " VND"
+    );
+};
+
 function UserCampaigns() {
     const navigate = useNavigate();
     const userId = useSelector((state) => state.auth.user.user_id);
@@ -62,17 +73,29 @@ function UserCampaigns() {
                     {campaigns.map((campaign) => (
                         <div
                             key={campaign.campaign_id}
-                            className="py-3 px-3 rounded-2xl bg-[#fbfaf8] min-w-[400px] max-w-[600px] border-[1px] border-[#c0bdb8] hover:border-2 hover:bg-[#2525250d] hover:border-black cursor-pointer flex flex-row justify-between items-center">
+                            className="mt-2 py-3 px-3 rounded-2xl bg-[#fbfaf8] w-[500px] border-[1px] border-[#c0bdb8] hover:border-2 hover:bg-[#2525250d] hover:border-black cursor-pointer flex flex-row gap-3 items-start justify-start"
+                            onClick={() => navigate(`/campaign/manage/${campaign.campaign_id}`)}>
                             <Avatar src={campaign.campaign_image} variant="rounded" />
-                            <div className="ml-5 flex-1 flex flex-col justify-center items-start">
-                                <h2 className="text-xl font-semibold">{campaign.title}</h2>
-                                <p className="truncate text-sm text-[#6f6f6f]">{campaign.description}</p>
-                            </div>
-                            <div className="flex flex-col justify-center items-start">
-                                <h2>
-                                    <b>Goal:</b> <span className="text-green-900">{campaign.goal_amount}</span>
-                                </h2>
-                                <p className="text-sm text-[#6f6f6f]">Current: {campaign.current_amount}</p>
+                            <div>
+                                <div className="flex-1 flex flex-col justify-center items-start">
+                                    <h2 className="text-lg font-semibold">{campaign.title}</h2>
+                                </div>
+                                <div className="flex flex-col justify-center items-start">
+                                    <h2 className="text-sm">
+                                        <b>Goal:</b>{" "}
+                                        <span className="text-green-900">
+                                            {formatCurrencyVND(campaign.goal_fiat)}
+                                        </span>
+                                    </h2>
+                                    <p className="text-sm text-[#6f6f6f]">
+                                        Current:{" "}
+                                        {(
+                                            (campaign.current_fiat / campaign.goal_fiat) *
+                                            100
+                                        ).toFixed(2)}
+                                        % of goal
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     ))}

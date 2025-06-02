@@ -1,9 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { List, ListItem } from "@mui/material";
 
 import { DropDown } from "../../../components/UI";
 
 function PopoverHeader({ dataRender, right = false }) {
+    const navigate = useNavigate();
+    
     return (
         <div className="">
             <DropDown name={dataRender.name} right={right}>
@@ -31,7 +34,7 @@ function PopoverHeader({ dataRender, right = false }) {
                                 cursor: "pointer",
                                 borderRadius: "10px",
                                 ":hover": { backgroundColor: "#fbfaf8" }
-                            }}>
+                            }} onClick={() => navigate(item.path)}>
                             <span className="text-[#252525] text-[16px]">{item.title}</span>
                             <span className="text-[#6f6f6f] text-[0.875rem]">{item.subTitle}</span>
                         </ListItem>
@@ -48,7 +51,7 @@ PopoverHeader.propTypes = {
         title: PropTypes.string,
         items: PropTypes.arrayOf(PropTypes.array)
     }).isRequired,
-    right: PropTypes.bool,
+    right: PropTypes.bool
 };
 
 export default PopoverHeader;

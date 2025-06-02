@@ -18,16 +18,16 @@ import PaymeLogo from "../../assets/images/Logo-PayME-V.webp";
 import PaypalLogo from "../../assets/images/paypal.png";
 
 const PAYMENT_METHODS = [
-    {
-        id: "momo",
-        name: "Momo",
-        img: MomoLogo
-    },
-    {
-        id: "payme",
-        name: "Payme",
-        img: PaymeLogo
-    },
+    // {
+    //     id: "momo",
+    //     name: "Momo",
+    //     img: MomoLogo
+    // },
+    // {
+    //     id: "payme",
+    //     name: "Payme",
+    //     img: PaymeLogo
+    // },
     {
         id: "paypal",
         name: "Palpal",
@@ -35,35 +35,35 @@ const PAYMENT_METHODS = [
     },
     {
         id: "binance",
-        name: "Binance USDT",
+        name: "Binance ETH",
         img: USDTLogo
     }
 ];
 
 const POLICIES = {
-    payme: {
-        processingTime: "Instant - 10 minutes",
-        fee: "0%",
-        limit: [10000, 10000000],
-        currency: "VND"
-    },
+    // payme: {
+    //     processingTime: "Instant - 10 minutes",
+    //     fee: "0%",
+    //     limit: [10000, 10000000],
+    //     currency: "VND"
+    // },
     paypal: {
         processingTime: "Instant - 10 minutes",
         fee: "0%",
         limit: [10000, 10000000],
         currency: "VND"
     },
-    momo: {
-        processingTime: "Instant - 10 minutes",
-        fee: "0%",
-        limit: [10000, 10000000],
-        currency: "VND"
-    },
+    // momo: {
+    //     processingTime: "Instant - 10 minutes",
+    //     fee: "0%",
+    //     limit: [10000, 10000000],
+    //     currency: "VND"
+    // },
     binance: {
         processingTime: "Instant - 10 minutes",
         fee: "",
         limit: [100, 10000],
-        currency: "USDT"
+        currency: "ETH"
     }
 };
 
@@ -105,6 +105,10 @@ function Deposit() {
         };
         fetchCurrencyRate();
     }, []);
+
+    if (method !== "paypal" && method !== "binance") {
+        return navigate("/balance");
+    }
 
     const handleChangeAmountInput = (e) => {
         const value = e.target.value;

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Dialog, Avatar, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const formatCurrencyVND = (amount) => {
     const parsed = parseFloat(amount);
@@ -15,6 +17,8 @@ const formatCurrencyVND = (amount) => {
 import bgShareProfile from "../../assets/images/bgShareProfile.jpg";
 
 function DonationInfo({ campaign }) {
+    const userId = useSelector((state) => state.auth.user.user_id);
+    const navigate = useNavigate();
     // innit
     const info = campaign.campaignInfo;
     const donations = campaign.campaignDonations;
@@ -38,14 +42,27 @@ function DonationInfo({ campaign }) {
     return (
         <div className="hidden md:block w-full h-fit max-w-sm bg-white rounded-2xl p-6 shadow-md">
             {/* Raised amount + percentage */}
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex flex-col justify-center items-start mb-4">
                 <div>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className="text-3xl font-bold text-green-900">
                         {formatCurrencyVND(info.current_fiat)} raised
                     </p>
-                    <p className="text-sm text-gray-500">
-                        Goal {formatCurrencyVND(info.goal_fiat)} · {donations.stats.total_count}{" "}
-                        donations
+                    <div className="flex items-center gap-2 mt-1">
+                        <p className="text-sm text-gray-600">
+                            Goal {formatCurrencyVND(info.goal_fiat)} · {donations.stats.total_count}{" "}
+                            donations
+                        </p>
+                        <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded">
+                            Primary goal
+                        </span>
+                    </div>
+                </div>
+                <div className="mt-6">
+                    <p className="text-xl font-bold text-gray-900">
+                        {info.current_crypto} ETH raised
+                    </p>
+                    <p className="text-[12px] text-gray-500">
+                        Goal {info.goal_crypto} ETH · {donations.stats.total_count} donations
                     </p>
                 </div>
             </div>
@@ -57,7 +74,13 @@ function DonationInfo({ campaign }) {
                     className="bg-lime-300 text-gray-900 py-2 rounded-lg font-semibold hover:bg-lime-400 transition cursor-pointer">
                     Share
                 </button>
-                <button className="bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition cursor-pointer">
+                <button
+                    disabled={userId === info.creator_id || info.isSuspend}
+                    onClick={() => {
+                        if (info.isSuspend) return;
+                        navigate(`/donation/${info.campaign_id}`);
+                    }}
+                    className="bg-green-800 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition cursor-pointer">
                     Donate now
                 </button>
             </div>
@@ -71,7 +94,9 @@ function DonationInfo({ campaign }) {
 
             {/* Action buttons */}
             <div className="flex gap-2">
-                <button className="flex-1 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition font-medium">
+                <button
+                    className="flex-1 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition font-medium cursor-pointer"
+                    onClick={() => navigate("/campaign/search")}>
                     Discover more
                 </button>
             </div>

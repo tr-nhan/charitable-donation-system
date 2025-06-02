@@ -1,8 +1,9 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 function DepositUnsuccess() {
+    const navigate = useNavigate();
     const { method } = useParams();
-
+    navigate("/balance");
     return <>{method}</>;
 }
 
