@@ -1,11 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowBack, ArrowForward, ArrowDropDown } from "@mui/icons-material";
-import TrackChangesIcon from "@mui/icons-material/TrackChanges";
-import CampaignIcon from "@mui/icons-material/Campaign";
-import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import bgImage from "../../assets/images/HomePage.jpg";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";

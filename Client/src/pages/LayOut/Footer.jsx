@@ -32,16 +32,14 @@ function Footer() {
                         </h3>
                         <ul className="space-y-2">
                             {[
-                                "How to start a GoFundUIT",
-                                "Fundraising categories",
-                                "Fundraising Blog",
-                                "Charity fundraising"
+                                { title: "How to start a GoFundUIT", slug: "how-to-start" },
+                                { title: "Fundraising categories", slug: "categories" },
+                                { title: "Fundraising Blog", slug: "fundraising-blog" },
+                                { title: "Charity fundraising", slug: "charity-fundraising" }
                             ].map((item) => (
-                                <li
-                                    key={item}
-                                    className="hover:bg-gray-50 cursor-pointer transition-colors rounded-xl p-2 m-0">
-                                    <a href="#" className="text-lg text-1">
-                                        {item}
+                                <li key={item.slug} className="hover:bg-gray-50 cursor-pointer transition-colors rounded-xl p-2 m-0">
+                                    <a href={`/${item.slug}`} className="text-lg text-1">
+                                        {item.title}
                                     </a>
                                 </li>
                             ))}
@@ -53,17 +51,18 @@ function Footer() {
                         <h3 className="font-semibold ml-2 mb-1 text-xl text-1">About</h3>
                         <ul className="space-y-2">
                             {[
-                                "GoFundUIT Donation Guarantee",
-                                "Countries Covered",
-                                "Help Center",
-                                "About GoFundUIT",
-                                "Press Center"
+                                { title: "GoFundUIT Donation Guarantee", slug: "donation-guarantee" },
+                                { title: "Countries Covered", slug: "countries-covered" },
+                                { title: "Help Center", slug: "help-center" },
+                                { title: "About GoFundUIT", slug: "about" },
+                                { title: "Press Center", slug: "press" }
                             ].map((item) => (
                                 <li
-                                    key={item}
-                                    className="hover:bg-gray-50 cursor-pointer transition-colors rounded-xl p-2 m-0">
-                                    <a href="#" className="text-lg text-1">
-                                        {item}
+                                    key={item.slug}
+                                    className="hover:bg-gray-50 cursor-pointer transition-colors rounded-xl p-2 m-0"
+                                >
+                                    <a href={`/${item.slug}`} className="text-lg text-1">
+                                        {item.title}
                                     </a>
                                 </li>
                             ))}
@@ -100,11 +99,9 @@ function Footer() {
                             "Rent assistance",
                             "Team fundraising ideas",
                             "What is crowdfunding?",
-                            "Why GoFundMe",
+                            "Why GoFundUIT",
                             "Common questions",
                             "Success stories",
-                            "Help with bills",
-                            "Fundraising ideas for college",
                             "School fundraising ideas",
                             "Help for veterans"
                         ].map((item) => {
@@ -144,33 +141,33 @@ function Footer() {
                             english
                         </button>
                         <div className="flex flex-col md:flex-row md:items-center flex-wrap -ml-2">
-                        <span className="text-[#6f6f6f] mx-2">©2025 GoFundUIT</span>
-                        <a href="#" className="my-0 mr-2 px-2 py-1 cursor-pointer text-lg text-1 hover:bg-gray-100 rounded-xl transition-colors">
-                            Conditions
-                        </a>
-                        <a href="#" className="my-0 mr-2 px-2 py-1 cursor-pointer text-lg text-1 hover:bg-gray-100 rounded-xl transition-colors">
-                            Privacy Notice
-                        </a>
-                        <a href="#" className="my-0 mr-2 px-2 py-1 cursor-pointer text-lg text-1 hover:bg-gray-100 rounded-xl transition-colors">
-                            Legal
-                        </a>
+                            <span className="text-[#6f6f6f] mx-2">©2025 GoFundUIT</span>
+                            <a href="#" className="my-0 mr-2 px-2 py-1 cursor-pointer text-lg text-1 hover:bg-gray-100 rounded-xl transition-colors">
+                                Conditions
+                            </a>
+                            <a href="#" className="my-0 mr-2 px-2 py-1 cursor-pointer text-lg text-1 hover:bg-gray-100 rounded-xl transition-colors">
+                                Privacy Notice
+                            </a>
+                            <a href="#" className="my-0 mr-2 px-2 py-1 cursor-pointer text-lg text-1 hover:bg-gray-100 rounded-xl transition-colors">
+                                Legal
+                            </a>
+                        </div>
                     </div>
-                    </div>
-                    <div className="flex flex-col items-start space-y-1">
+                    <div className="flex flex-col items-end space-y-1">
                         <div className="flex items-center">
-                            <MapPin className="text-xl mr-2" />
                             <span>Khu phố 6, P.Linh Trung, Tp.Thủ Đức, Tp.Hồ Chí Minh.</span>
+                            <MapPin className="text-xl ml-2" />
                         </div>
                         <div className="flex items-center">
-                            <Mail className="text-xl mr-2" />
                             <a href="mailto:support@gofunduit.com" className="hover:underline">support@gofunduit.com</a>
+                            <Mail className="text-xl ml-2" />
                         </div>
                         <div className="flex items-center">
-                            <Phone className="text-xl mr-2" />
                             <a href="tel:+0909090909" className="hover:underline">+84 0909090909</a>
+                            <Phone className="text-xl ml-2" />
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </footer>
