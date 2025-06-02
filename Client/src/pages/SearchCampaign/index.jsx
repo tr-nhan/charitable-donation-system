@@ -136,7 +136,8 @@ function SearchCampaign() {
                     toGoal: parsedGoal
                         ? parsedGoal[1] || Number.MAX_SAFE_INTEGER
                         : Number.MAX_SAFE_INTEGER,
-                    page
+                    page,
+                    categoryId: category
                 };
 
                 const res = await getCampaignsByFilter(filters);

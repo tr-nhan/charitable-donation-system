@@ -43,9 +43,9 @@ function UserCampaigns() {
     }, []);
 
     return (
-        <div className="w-full mt-5">
+        <>
             {campaigns.length === 0 ? (
-                <div className="w-full flex flex-col justify-start items-center">
+                <div className="px-10 w-full flex flex-col justify-start items-center">
                     <h2 className="text-center text-[#252525] font-semibold text-xl">
                         No Campaigns
                     </h2>
@@ -68,7 +68,7 @@ function UserCampaigns() {
                     </Button>
                 </div>
             ) : (
-                <div className="w-full flex flex-col justify-start items-center">
+                <div className="px-10 w-full flex flex-col justify-start items-center">
                     <h1 className="mb-5 text-xl font-semibold">Your Campaigns</h1>
                     {campaigns.map((campaign) => (
                         <div
@@ -78,7 +78,9 @@ function UserCampaigns() {
                             <Avatar src={campaign.campaign_image} variant="rounded" />
                             <div>
                                 <div className="flex-1 flex flex-col justify-center items-start">
-                                    <h2 className="text-lg font-semibold">{campaign.title}</h2>
+                                    <h2 className="text-lg font-semibold truncate max-w-[400px]">
+                                        {campaign.title}
+                                    </h2>
                                 </div>
                                 <div className="flex flex-col justify-center items-start">
                                     <h2 className="text-sm">
@@ -102,7 +104,7 @@ function UserCampaigns() {
                 </div>
             )}
             {loading && <Loading />}
-        </div>
+        </>
     );
 }
 

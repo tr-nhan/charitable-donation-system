@@ -327,7 +327,7 @@ const filterCampaignsWithPaginationController = async (req, res) => {
             toGoal = Number.MAX_SAFE_INTEGER,
             categoryId = null,
             page = 0
-        } = req.query;
+        } = req.query;        
 
         const result = await filterCampaignsWithPagination(
             q,

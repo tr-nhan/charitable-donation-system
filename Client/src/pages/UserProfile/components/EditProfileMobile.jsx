@@ -42,11 +42,16 @@ function EditProfileMobile({ open, onClose, data, setNewProfile }) {
     }, [open]);
 
     useEffect(() => {
-        document.body.style.overflow = "hidden";
+        if (open) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+
         return () => {
             document.body.style.overflow = "auto";
         };
-    }, []);
+    }, [open]);
 
     useEffect(() => {
         let isSame = true;
@@ -115,7 +120,7 @@ function EditProfileMobile({ open, onClose, data, setNewProfile }) {
                 const res = await updateUser(changedData);
                 if (res.error === 0) {
                     setIsChanged(false);
-                    setNewProfile(userInfo)
+                    setNewProfile(userInfo);
                     onClose();
                 }
             } catch (error) {
