@@ -1,6 +1,6 @@
-import { Facebook, Instagram, KeyboardArrowDown, Mic, YouTube } from "@mui/icons-material";
+import { Facebook, Instagram, KeyboardArrowDown, Mail, Mic, Phone, YouTube } from "@mui/icons-material";
+import { MapPin } from "lucide-react";
 import { useState } from "react";
-import franceIcon from "../../assets/icons/france.svg";
 import { FaXTwitter } from "react-icons/fa6";
 
 function Footer() {
@@ -18,8 +18,8 @@ function Footer() {
                         <h3 className="font-semibold ml-2 mb-1 text-xl text-1">My Support</h3>
                         <ul className="space-y-2">
                             <li className="hover:bg-gray-50 cursor-pointer transition-colors rounded-xl p-2 m-0">
-                                <a href="#" className="text-lg text-1">
-                                Categories
+                                <a href="/categories" className="text-lg text-1">
+                                    Categories
                                 </a>
                             </li>
                         </ul>
@@ -28,13 +28,14 @@ function Footer() {
                     {/* Fundraising Column */}
                     <div className="space-y-4">
                         <h3 className="font-semibold ml-2 mb-1 text-xl text-1">
-                        Raise funds
+                            Fundraise
                         </h3>
                         <ul className="space-y-2">
                             {[
-                                "Comment démarrer une cagnotte",
-                                "Collecte de fonds en équipe",
-                                "Blog sur la collecte de fonds"
+                                "How to start a GoFundUIT",
+                                "Fundraising categories",
+                                "Fundraising Blog",
+                                "Charity fundraising"
                             ].map((item) => (
                                 <li
                                     key={item}
@@ -52,13 +53,11 @@ function Footer() {
                         <h3 className="font-semibold ml-2 mb-1 text-xl text-1">About</h3>
                         <ul className="space-y-2">
                             {[
-                                "GoFundMe Donation Guarantee",
+                                "GoFundUIT Donation Guarantee",
                                 "Countries Covered",
-                                "Fees",
                                 "Help Center",
-                                "About GoFundMe",
-                                "Press Center",
-                                "Jobs"
+                                "About GoFundUIT",
+                                "Press Center"
                             ].map((item) => (
                                 <li
                                     key={item}
@@ -74,12 +73,12 @@ function Footer() {
                     {/* Legal Column */}
                     <div className="space-y-4">
                         <img
-                            src="https://www.gofundme.com/nextassets/shared/logo-ifp.png"
-                            alt="GoFundMe"
+                            src="https://courses.uit.edu.vn/pluginfile.php/1/core_admin/logocompact/300x300/1748450794/Logo_UIT_Web-218x261.png"
+                            alt="GoFundUIT"
                             className="h-16 w-16 object-contain"
                         />
                         <p className="text-gray-600 text-base">
-                        Charity Proj is registered with ORIAS as a Crowdfunding Intermediary (IFP) under registration number 24000751
+                            GoFundUIT
                         </p>
                     </div>
                 </div>
@@ -92,32 +91,43 @@ function Footer() {
                             className={`ml-2 w-8! h-8!  ${isOpen ? "animate-spinACircle" : "animate-spinReverse"}`}
                         />
                     </button>
-                    <ul
-                        className={`${isOpen ? "grid animate-fadeIn" : "hidden"} transition-all duration-300 ease-in-out overflow-hidden 
-                space-y-2 grid-cols-1 lg:grid-flow-col lg:grid-cols-4 lg:grid-rows-[repeat(4,auto)] gap-x-8`}>
+                    <ul className={`${isOpen ? "grid animate-fadeIn" : "hidden"} transition-all duration-300 ease-in-out overflow-hidden 
+    space-y-2 grid-cols-1 lg:grid-flow-col lg:grid-cols-4 lg:grid-rows-[repeat(4,auto)] gap-x-8`}>
                         {[
-                            "Conseils pour collecter des fonds",
-                            "Idées de collecte de fonds",
-                            "Aide pour payer le loyer",
-                            "Sites de collecte de fonds",
-                            "Qu'est-ce que le financement participatif ?",
-                            "Pourquoi GoFundMe",
-                            "Questions fréquentes",
-                            "Témoignages",
-                            "Aide pour payer des factures",
-                            "Aide pour régler des frais médicaux",
-                            "Idées de cagnottes scolaires",
-                            "Comment demander un chien d'assistance",
-                            "Sites de financement participatif"
-                        ].map((item) => (
-                            <li
-                                key={item}
-                                className="hover:bg-gray-50 cursor-pointer transition-colors rounded-xl p-2 m-0">
-                                <a href="#" className="text-lg text-1">
-                                    {item}
-                                </a>
-                            </li>
-                        ))}
+                            "Fundraising Tips",
+                            "Fundraising ideas",
+                            "Fundraising sites",
+                            "Rent assistance",
+                            "Team fundraising ideas",
+                            "What is crowdfunding?",
+                            "Why GoFundMe",
+                            "Common questions",
+                            "Success stories",
+                            "Help with bills",
+                            "Fundraising ideas for college",
+                            "School fundraising ideas",
+                            "Help for veterans"
+                        ].map((item) => {
+                            const createSlug = (text) => {
+                                return text
+                                    .toLowerCase()
+                                    .replace(/[^\w\s-]/g, '')
+                                    .replace(/\s+/g, '-')
+                                    .replace(/--+/g, '-');
+                            };
+
+                            const slug = createSlug(item);
+
+                            return (
+                                <li
+                                    key={item}
+                                    className="hover:bg-gray-50 cursor-pointer transition-colors rounded-xl p-2 m-0">
+                                    <a href={`/${slug}`} className="text-lg text-1">
+                                        {item}
+                                    </a>
+                                </li>
+                            );
+                        })}
                     </ul>
                 </div>
                 <div
@@ -125,78 +135,42 @@ function Footer() {
                     style={{ left: "50%", transform: "translateX(-50%)", width: "100vw" }}></div>
             </div>
             <div className="container mx-auto px-4 pb-12 max-w-7xl relative">
-                <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-2 gap-4 py-12 mx-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-12 mx-2">
                     <div>
-                        <button className="flex items-center justify-center text-[16px] border rounded-xl p-2 min-h-8 border-[#c0bdb8]">
-                            <img src={franceIcon} alt="england icon" className="w-4 h-4 mr-2" />
+                        <button className="flex items-center cursor-pointer justify-center text-[16px] 
+            border rounded-xl p-2 min-h-8 border-[#c0bdb8] hover:bg-[#eee]">
                             English
                             <span className="mx-2 mb-1 -mt-1">.</span>
                             english
                         </button>
-                    </div>
-                    <div className="flex items-center md:justify-end">
-                        <a
-                            href=""
-                            className="w-12! h-12! inline-flex items-center justify-center rounded-full cursor-pointer bg-[#0000] hover:bg-gray-100">
-                            <Facebook className="text-3xl!" />
-                        </a>
-                        <a
-                            href=""
-                            className="w-12! h-12! inline-flex items-center justify-center rounded-full cursor-pointer bg-[#0000] hover:bg-gray-100">
-                            <YouTube className="text-3xl!" />
-                        </a>
-                        <a
-                            href=""
-                            className="w-12! h-12! inline-flex items-center justify-center rounded-full cursor-pointer bg-[#0000] hover:bg-gray-100">
-                            <FaXTwitter className="text-3xl!" />
-                        </a>
-                        <a
-                            href=""
-                            className="w-12! h-12! inline-flex items-center justify-center rounded-full cursor-pointer bg-[#0000] hover:bg-gray-100">
-                            <Instagram className="text-3xl!" />
-                        </a>
-                        <a
-                            href=""
-                            className="w-12! h-12! inline-flex items-center justify-center rounded-full cursor-pointer bg-[#0000] hover:bg-gray-100">
-                            <Mic className="text-3xl!" />
-                        </a>
-                    </div>
-                    <div className="flex flex-col md:flex-row md:items-center flex-wrap -ml-2">
-                        <span className="text-[#6f6f6f] mx-2">© 2010-2025 GoFundUIT</span>
-                        <a
-                            href="#"
-                            className="my-0 mr-2 px-2 py-1 cursor-pointer text-lg text-1 hover:bg-gray-100 rounded-xl transition-colors">
+                        <div className="flex flex-col md:flex-row md:items-center flex-wrap -ml-2">
+                        <span className="text-[#6f6f6f] mx-2">©2025 GoFundUIT</span>
+                        <a href="#" className="my-0 mr-2 px-2 py-1 cursor-pointer text-lg text-1 hover:bg-gray-100 rounded-xl transition-colors">
                             Conditions
                         </a>
-                        <a
-                            href="#"
-                            className="my-0 mr-2 px-2 py-1 cursor-pointer text-lg text-1 hover:bg-gray-100 rounded-xl transition-colors">
-                            Privacy notice
+                        <a href="#" className="my-0 mr-2 px-2 py-1 cursor-pointer text-lg text-1 hover:bg-gray-100 rounded-xl transition-colors">
+                            Privacy Notice
                         </a>
-                        <a
-                            href="#"
-                            className="my-0 mr-2 px-2 py-1 cursor-pointer text-lg text-1 hover:bg-gray-100 rounded-xl transition-colors">
-                            Legal purposes
-                        </a>
-                        <a
-                            href="#"
-                            className="my-0 mr-2 px-2 py-1 cursor-pointer text-lg text-1 hover:bg-gray-100 rounded-xl transition-colors flex items-center md:justify-center">
-                            Your privacy choices
-                            <img
-                                src="https://www.gofundme.com/nextassets/shared/privacy-pill.png"
-                                alt="#"
-                                className="w-[29px] h-[14px] ml-2 mt-1"
-                            />
+                        <a href="#" className="my-0 mr-2 px-2 py-1 cursor-pointer text-lg text-1 hover:bg-gray-100 rounded-xl transition-colors">
+                            Legal
                         </a>
                     </div>
-                    <div className="flex md:justify-end">
-                        <a
-                            href="#"
-                            className="bg-[url(https://d25oniaj7o2jcw.cloudfront.net/img-play-store-fr.png)] h-[2.125rem] w-[7.3125rem] bg-no-repeat bg-cover mr-2"></a>
-                        <a
-                            href="#"
-                            className="bg-[url(https://d25oniaj7o2jcw.cloudfront.net/img-app-store-fr-v2.png)] h-[2.125rem] w-[7.3125rem] bg-no-repeat bg-cover "></a>
                     </div>
+                    <div className="flex flex-col items-start space-y-1">
+                        <div className="flex items-center">
+                            <MapPin className="text-xl mr-2" />
+                            <span>Khu phố 6, P.Linh Trung, Tp.Thủ Đức, Tp.Hồ Chí Minh.</span>
+                        </div>
+                        <div className="flex items-center">
+                            <Mail className="text-xl mr-2" />
+                            <a href="mailto:support@gofunduit.com" className="hover:underline">support@gofunduit.com</a>
+                        </div>
+                        <div className="flex items-center">
+                            <Phone className="text-xl mr-2" />
+                            <a href="tel:+0909090909" className="hover:underline">+84 0909090909</a>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </footer>
