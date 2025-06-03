@@ -60,53 +60,59 @@ function HeaderMobile() {
 
                     <Box mt={2}>
                         <List sx={{ width: "100%" }}>
-                            {["Your Profile", "Your Balance", "How to Start?"].map(
-                                (text, index) => (
-                                    <ListItem
-                                        key={text}
-                                        button
-                                        onClick={() => {
-                                            const routes = [
-                                                "/profile",
-                                                "/balance",
-                                                "/fundraising-tips"
-                                            ];
-                                            navigate(routes[index]);
-                                            setIsDrawerOpen(false);
-                                        }}
-                                        sx={{
-                                            borderRadius: 2,
-                                            paddingY: 1.8,
-                                            paddingX: 2.5,
-                                            mb: index < 2 ? 2 : 0, // space between items except last
-                                            border: "1px solid transparent",
-                                            // boxShadow: "0 0 0 rgba(0,0,0,0)", // for smooth shadow transition
-                                            transition:
-                                                "background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
-                                            fontWeight: 600,
-                                            fontSize: 16,
-                                            color: "#222",
-                                            cursor: "pointer",
-                                            userSelect: "none",
+                            {[
+                                "Your Profile",
+                                "Your Balance",
+                                "How to Start?",
+                                "Help Center",
+                                "Common Questions"
+                            ].map((text, index) => (
+                                <ListItem
+                                    key={text}
+                                    button
+                                    onClick={() => {
+                                        const routes = [
+                                            "/profile",
+                                            "/balance",
+                                            "/fundraising-tips",
+                                            "/help-center",
+                                            "/common-questions"
+                                        ];
+                                        navigate(routes[index]);
+                                        setIsDrawerOpen(false);
+                                    }}
+                                    sx={{
+                                        borderRadius: 2,
+                                        paddingY: 1.8,
+                                        paddingX: 2.5,
+                                        mb: index < 4 ? 2 : 0, // space between items except last
+                                        border: "1px solid transparent",
+                                        // boxShadow: "0 0 0 rgba(0,0,0,0)", // for smooth shadow transition
+                                        transition:
+                                            "background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
+                                        fontWeight: 600,
+                                        fontSize: 16,
+                                        color: "#222",
+                                        cursor: "pointer",
+                                        userSelect: "none",
+                                        backgroundColor: "#f0f7f5",
+                                        borderColor: "#008044",
+                                        boxShadow: "0 4px 12px rgba(0, 128, 68, 0.15)",
+
+                                        "&:hover": {
                                             backgroundColor: "#f0f7f5",
                                             borderColor: "#008044",
-                                            boxShadow: "0 4px 12px rgba(0, 128, 68, 0.15)",
-
-                                            "&:hover": {
-                                                backgroundColor: "#f0f7f5",
-                                                borderColor: "#008044",
-                                                boxShadow: "0 4px 12px rgba(0, 128, 68, 0.15)"
-                                            },
-                                            "&:active": {
-                                                backgroundColor: "#d9ede9",
-                                                borderColor: "#00592a",
-                                                boxShadow: "none"
-                                            }
-                                        }}>
-                                        {text}
-                                    </ListItem>
-                                )
-                            )}
+                                            boxShadow: "0 4px 12px rgba(0, 128, 68, 0.15)"
+                                        },
+                                        "&:active": {
+                                            backgroundColor: "#bbebd0",
+                                            borderColor: "#00592a",
+                                            boxShadow: "none"
+                                        }
+                                    }}>
+                                    {text}
+                                </ListItem>
+                            ))}
                         </List>
                     </Box>
 

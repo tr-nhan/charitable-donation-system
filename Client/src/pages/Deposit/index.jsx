@@ -18,11 +18,11 @@ import PaymeLogo from "../../assets/images/Logo-PayME-V.webp";
 import PaypalLogo from "../../assets/images/paypal.png";
 
 const PAYMENT_METHODS = [
-    // {
-    //     id: "momo",
-    //     name: "Momo",
-    //     img: MomoLogo
-    // },
+    {
+        id: "momo",
+        name: "Momo (Not support now)",
+        img: MomoLogo
+    },
     // {
     //     id: "payme",
     //     name: "Payme",
@@ -32,12 +32,12 @@ const PAYMENT_METHODS = [
         id: "paypal",
         name: "Palpal",
         img: PaypalLogo
-    },
-    {
-        id: "binance",
-        name: "Binance ETH",
-        img: USDTLogo
     }
+    // {
+    //     id: "binance",
+    //     name: "Binance ETH",
+    //     img: USDTLogo
+    // }
 ];
 
 const POLICIES = {
@@ -106,7 +106,7 @@ function Deposit() {
         fetchCurrencyRate();
     }, []);
 
-    if (method !== "paypal" && method !== "binance") {
+    if (method !== "paypal" && method !== "momo") {
         return navigate("/balance");
     }
 
@@ -189,7 +189,9 @@ function Deposit() {
                         <Select
                             id="payment-method"
                             defaultValue={method}
-                            onChange={(e) => navigate(`/deposite/${e.target.value}`)}>
+                            onChange={(e) => {
+                                navigate(`/deposite/${e.target.value}`);
+                            }}>
                             {PAYMENT_METHODS.map((method) => (
                                 <MenuItem
                                     key={method.id}

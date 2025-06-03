@@ -76,6 +76,7 @@ function App() {
                     <Route path="/donation/:campaignId" element={<DonationCampaign />} />
                     <Route path="/campaign/report/:campaignId" element={<ReportCampaign />} />
                     <Route path="/user/discover/:userId" element={<DiscoverUser />} />
+                    <Route path="*" element={<PageNotFound />} />
                     <Route path="/transaction/history" element={<TransactionHistory />} />
                 </Route>
                 <Route path="/create-campaign" element={<CreateCampaign />} />
@@ -90,7 +91,7 @@ function App() {
             </Route>
 
             <Route path="login-success" element={<LoginSuccess />} />
-            <Route path="*" element={<PageNotFound />} />
+            
             <Route path="/deposit/:method/payment-success" element={<DepositSuccess />} />
             <Route path="/deposit/:method/payment-cancelled" element={<DepositUnsuccess />} />
 

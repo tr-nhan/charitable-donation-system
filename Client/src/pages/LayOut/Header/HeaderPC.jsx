@@ -52,6 +52,11 @@ const FUNDRAISING = {
             title: "Fundraising categories",
             subTitle: "Find the right category for you",
             path: "/categories"
+        },
+        {
+            title: "Common questions",
+            subTitle: "Learn more about fundraising, donating, or sharing on GoFundUIT",
+            path: "/common-questions"
         }
     ]
 };
@@ -85,6 +90,10 @@ const USER = [
     {
         title: "How to start?",
         path: "/fundraising-tips"
+    },
+    {
+        title: "Help Center",
+        path: "/help-center"
     }
 ];
 
@@ -187,10 +196,11 @@ function HeaderPC() {
                             borderColor: "#c0bdb8",
                             borderRadius: "25px",
                             fontWeight: "600",
+                            marginRight: "80px",
                             paddingX: 2,
                             ":hover": { backgroundColor: "#fbfaf8" }
                         }}>
-                        Start a UIT-FundMe
+                        Start a Fund
                     </Button>
                 )}
                 {isLoggedIn && (
@@ -205,7 +215,7 @@ function HeaderPC() {
                                     <ListItem
                                         disablePadding
                                         key={index}
-                                        onClick={() => {
+                                        onClick={() => {                                            
                                             navigate(item.path);
                                         }}
                                         sx={{

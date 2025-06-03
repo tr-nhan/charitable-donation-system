@@ -62,13 +62,13 @@ function ManageCampaign() {
     return (
         <div className="w-full py-10 px-2 md:px-10 flex flex-col md:flex-row items-start gap-5">
             {/* Buttons container */}
-            <div className="flex flex-row md:flex-col gap-2 w-full md:w-auto">
+            <div className="flex flex-row md:flex-col gap-2 w-full md:w-auto flex-wrap">
                 {OPTIONS.map((option) => (
                     <button
                         key={option.value}
                         onClick={() => setActive(option.value)}
-                        className={`px-4 py-3 rounded cursor-pointer text-lg font-semibold ${
-                            active === option.value ? "bg-green-800 text-white" : "bg-gray-200"
+                        className={`md:px-4 md:py-3 px-6 py-3 rounded cursor-pointer md:text-lg font-semibold ${
+                            active === option.value ? "bg-green-500 text-white" : "bg-gray-200"
                         }`}>
                         {option.label}
                     </button>

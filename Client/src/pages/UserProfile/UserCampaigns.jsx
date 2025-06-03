@@ -68,17 +68,17 @@ function UserCampaigns() {
                     </Button>
                 </div>
             ) : (
-                <div className="px-10 w-full flex flex-col justify-start items-center">
+                <div className="md:px-10 w-full flex flex-col justify-start items-center">
                     <h1 className="mb-5 text-xl font-semibold">Your Campaigns</h1>
                     {campaigns.map((campaign) => (
                         <div
                             key={campaign.campaign_id}
-                            className="mt-2 py-3 px-3 rounded-2xl bg-[#fbfaf8] w-[500px] border-[1px] border-[#c0bdb8] hover:border-2 hover:bg-[#2525250d] hover:border-black cursor-pointer flex flex-row gap-3 items-start justify-start"
+                            className="mt-2 py-3 px-3 rounded-2xl bg-[#fbfaf8] w-[400px] md:w-[500px] border-[1px] border-[#c0bdb8] hover:border-2 hover:bg-[#2525250d] hover:border-black cursor-pointer flex flex-row gap-3 items-start justify-start"
                             onClick={() => navigate(`/campaign/manage/${campaign.campaign_id}`)}>
                             <Avatar src={campaign.campaign_image} variant="rounded" />
                             <div>
                                 <div className="flex-1 flex flex-col justify-center items-start">
-                                    <h2 className="text-lg font-semibold truncate max-w-[400px]">
+                                    <h2 className="text-lg font-semibold truncate max-w-[300px] md:max-w-[400px]">
                                         {campaign.title}
                                     </h2>
                                 </div>
