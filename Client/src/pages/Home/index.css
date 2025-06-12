@@ -1,0 +1,27 @@
+.slide-out {
+    animation: slideOut 0.2s ease-in-out forwards;
+}
+.slide-in {
+    animation: slideIn 0.2s ease-in-out forwards;
+}
+@keyframes slideOut {
+    from {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+    to {
+        transform: translate3d(-10%, 0, 0);
+        opacity: 0;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translate3d(10%, 0, 0);
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+}

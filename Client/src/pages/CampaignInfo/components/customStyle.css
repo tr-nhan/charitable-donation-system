@@ -1,0 +1,59 @@
+/* bounceDots.css */
+@keyframes bounceDot {
+    0%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-8px);
+    }
+}
+
+.bounce-dot {
+    animation: bounceDot 1.2s infinite;
+}
+
+.bounce-delay-0 {
+    animation-delay: 0s;
+}
+
+.bounce-delay-1 {
+    animation-delay: 0.2s;
+}
+
+.bounce-delay-2 {
+    animation-delay: 0.4s;
+}
+
+/* EditBioMobile.css */
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+.edit-bio-enter {
+    animation: slideUp 0.3s ease-out forwards;
+}
+
+.edit-bio-exit {
+    animation: slideDown 0.3s ease-in forwards;
+}
