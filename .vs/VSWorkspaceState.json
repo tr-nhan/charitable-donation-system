@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Client",
+    "\\Client\\public",
+    "\\Client\\src",
+    "\\Client\\src\\pages",
+    "\\Client\\src\\pages\\CreateCampaign",
+    "\\Client\\src\\pages\\CreateCampaign\\ChooseType",
+    "\\Client\\src\\pages\\CreateCampaign\\Goal",
+    "\\Client\\src\\pages\\CreateCampaign\\InfoCampaign",
+    "\\Client\\src\\pages\\Home"
+  ],
+  "SelectedNode": "\\Client\\src\\pages\\Home\\HomePage.jsx",
+  "PreviewInSolutionExplorer": false
+}

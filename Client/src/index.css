@@ -1,68 +1,68 @@
-:root {
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    font-weight: 400;
+@import "tailwindcss";
 
-    color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
-
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+@theme {
+    --color-base-1: #008044;
+    --color-base-2: #091405;
+    --color-base-3: #bbc0b9;
+    --color-base-4: #80877d;
+    --color-base-5: #444d41;
+    --color-accent-1: #035772;
+    --color-accent-2: #e0fd2c;
+    --color-accent-3: #a5c8d4;
+    --color-accent-4: #a12767;
+    --text-color-1: #252525;
+    --text-color-2: #18412d;
+    --text-color-3: #015d32;
 }
-
-a {
-    font-weight: 500;
-    color: #646cff;
-    text-decoration: inherit;
-}
-a:hover {
-    color: #535bf2;
-}
-
-body {
-    margin: 0;
-    display: flex;
-    place-items: center;
-    min-width: 320px;
-    min-height: 100vh;
-}
-
-h1 {
-    font-size: 3.2em;
-    line-height: 1.1;
-}
-
-button {
-    border-radius: 8px;
-    border: 1px solid transparent;
-    padding: 0.6em 1.2em;
-    font-size: 1em;
-    font-weight: 500;
-    font-family: inherit;
-    background-color: #1a1a1a;
-    cursor: pointer;
-    transition: border-color 0.25s;
-}
-button:hover {
-    border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-    outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-    :root {
-        color: #213547;
-        background-color: #ffffff;
+/*  */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
     }
-    a:hover {
-        color: #747bff;
+    to {
+        opacity: 1;
     }
-    button {
-        background-color: #f9f9f9;
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes spinACircle {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(180deg);
+    }
+}
+
+@keyframes spinReverse {
+    from {
+        transform: rotate(180deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+.animate-spinACircle {
+    animation: spinACircle 0.5s ease-in-out forwards;
+}
+
+.animate-spinReverse {
+    animation: spinReverse 0.5s ease-in-out forwards;
+}
+@layer base {
+    h1 {
+        font-size: 1.4rem;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    h3 {
+        font-size: 1.1rem;
     }
 }

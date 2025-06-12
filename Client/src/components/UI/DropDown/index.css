@@ -1,0 +1,113 @@
+@keyframes dropdownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOutRotateDown {
+    from {
+        opacity: 1;
+        transform: rotate(0deg);
+    }
+    to {
+        opacity: 0;
+        transform: rotate(90deg);
+    }
+}
+
+@keyframes fadeInRotateUp {
+    from {
+        opacity: 0;
+        transform: rotate(-90deg);
+    }
+    to {
+        opacity: 1;
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes fadeOutRotateUp {
+    from {
+        opacity: 1;
+        transform: rotate(0deg);
+    }
+    to {
+        opacity: 0;
+        transform: rotate(-90deg);
+    }
+}
+
+@keyframes fadeInRotateDown {
+    from {
+        opacity: 0;
+        transform: rotate(90deg);
+    }
+    to {
+        opacity: 1;
+        transform: rotate(0deg);
+    }
+}
+
+.dropdown {
+    position: relative;
+    width: fit-content;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 6px 14px;
+    padding: 15px 25px;
+    width: fit-content;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.right-position {
+    left: auto;
+    right: 0;
+}
+
+.dropdown:hover .dropdown-menu {
+    animation: dropdownFade 0.25s ease forwards;
+    visibility: visible;
+}
+
+.arrow-down {
+    display: inline-block;
+    opacity: 1;
+    color: gray;
+    transition: opacity 0.25s ease;
+}
+
+.arrow-up {
+    display: inline-block;
+    opacity: 0;
+    position: absolute;
+    color: rgb(200, 200, 200);
+    right: -10%;
+    transition: opacity 0.25s ease;
+}
+
+.dropdown:hover .arrow-down {
+    animation: fadeOutRotateDown 0.25s ease forwards;
+}
+
+.dropdown:hover .arrow-up {
+    animation: fadeInRotateUp 0.25s ease forwards;
+}
+
+.dropdown:not(:hover) .arrow-up {
+    animation: fadeOutRotateUp 0.25s ease forwards;
+}
+
+.dropdown:not(:hover) .arrow-down {
+    animation: fadeInRotateDown 0.25s ease forwards;
+}
