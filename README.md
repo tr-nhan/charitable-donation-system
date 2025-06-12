@@ -2,6 +2,7 @@
 
 A full-stack web application designed to simplify charitable fundraising and donations. Users can create, discover, and contribute to various donation campaigns while admins manage campaigns and monitor platform activity.
 
+Link demo: (https://gofund.io.vn/)[https://gofund.io.vn/]
 ## 🏫 Course Information
 
 - **Class**: NT208.P23.ANTT  
